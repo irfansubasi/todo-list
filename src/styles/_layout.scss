@@ -55,4 +55,24 @@
     span{
         cursor: pointer;
     }
+
+}
+
+.project_head{
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.add-project{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: solid 0.1rem $red-color;
+    border-radius: 0.5rem;
+
+    &:hover{
+        opacity: 0.5;
+    }
 }

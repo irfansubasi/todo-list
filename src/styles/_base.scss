@@ -1,0 +1,29 @@
+
+$red-color: #FF4F5A;
+$black-color: #000000;
+$white-color: #ffffff;
+$grey-color: #6B6B6B;
+$grey-light: #F9F9F9;
+
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html{
+    font-size: 16px;
+}
+
+body{
+    min-height: 100vh;
+    background-color: $white-color;
+    font-family: "Raleway", sans-serif;
+}
+
+ul{
+    list-style-type: none;
+}

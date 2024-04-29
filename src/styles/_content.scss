@@ -1,0 +1,57 @@
+#project-head{
+    color: $red-color;
+}
+
+.todo{
+    display: flex;
+    align-items: center;
+    height: 2rem;
+    background-color: $grey-light;
+    color: $black-color;
+    border: $red-color solid 0.1rem;
+    border-radius: 1rem;
+    
+    &_checkbox{
+        cursor: pointer;
+        height: 1rem;
+        width: 1rem;
+        border: solid 0.1rem $red-color;
+    }
+
+    &_checkbox_checked{
+        height: 1rem;
+        width: 1rem;
+        background: url("../../dist/images/check.png"), $red-color;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    &_text{
+        display: flex;
+        flex-direction: column;
+
+        &-head{
+            font-weight: 600;
+        }
+
+        &-desc{
+            color: $grey-color;
+        }
+    }
+
+    i{
+        cursor: pointer;
+    }
+
+}
+
+.add-todo{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    &:hover{
+        opacity: 0.5;
+    }
+}

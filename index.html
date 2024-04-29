@@ -5,8 +5,104 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Document</title>
     <script defer="defer" src="main.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100..900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <button class="btn btn-primary">deneme</button>
+    <div class="page">
+        <div class="header p-1">
+            <div class="container">
+                <div class="header__logo">
+                    <i class="fa-solid fa-list-check"></i>
+                    <span class="header__logo-text">Todo Daily</span>
+                </div>
+            </div>
+        </div>
+        <aside class="navbar p-1">
+            <ul class="navbar__nav p-1">
+                <li class="navbar__nav-item">
+                    <span><i class="fa-solid fa-list"></i>All</span>
+                </li>
+                <li class="navbar__nav-item">
+                    <span><i class="fa-solid fa-calendar-day"></i>Today</span>
+                </li>
+                <li class="navbar__nav-item">
+                    <span><i class="fa-solid fa-calendar-days"></i>Upcoming</span>
+                </li>
+            </ul>
+            <hr>
+            <div class="project-section p-1">
+                <div class="project-0">
+                    <h3>Work</h3>
+                    <ul class="ms-1">
+                        <li class="mt-1">
+                            <span class="active">Learn react</span>
+                        </li>
+                        <li class="mt-1">
+                            <span>Finish project</span>
+                        </li>
+                        <li class="mt-1">
+                            <span>Contact customer</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="project-1 mt-1">
+                    <h3>Family</h3>
+                    <ul class="ms-1">
+                        <li class="mt-1">
+                            <span>Buy new car</span>
+                        </li>
+                        <li class="mt-1">
+                            <span>Adopt a dog</span>
+                        </li>
+                        <li class="mt-1">
+                            <span>Fix garage door</span>
+                        </li>
+                        <li class="mt-1">
+                            <span>Birthday party</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+        <main class="content p-3">
+            <h2 id="project-head">Learn React</h2>
+            <div class="todo p-2 my-1">
+                <div class="todo_checkbox"></div>
+                <div class="todo_text ms-1">
+                    <span class="todo_text-head">API Integration</span>
+                    <span class="todo_text-desc">Fetching data using Axios or fetch API.</span>
+                </div>
+                <span class="ms-auto todo_date">Aug 9th</span>
+                <i class="ms-1 fa-regular fa-pen-to-square"></i>
+                <i class="ms-1 fa-regular fa-trash-can"></i>
+            </div>
+            <div class="todo p-2 my-1">
+                <div class="todo_checkbox"></div>
+                <div class="todo_text ms-1">
+                    <span class="todo_text-head">Routing</span>
+                    <span class="todo_text-desc">Implementing page navigation using React Router.</span>
+                </div>
+                <span class="ms-auto todo_date">Aug 17th</span>
+                <i class="ms-1 fa-regular fa-pen-to-square"></i>
+                <i class="ms-1 fa-regular fa-trash-can"></i>
+            </div>
+            <div class="todo p-2 my-1">
+                <div class="todo_checkbox_checked"></div>
+                <div class="todo_text ms-1">
+                    <span class="todo_text-head">State Management</span>
+                    <span class="todo_text-desc">Understanding state and its importance</span>
+                </div>
+                <span class="ms-auto todo_date">Aug 20th</span>
+                <i class="ms-1 fa-regular fa-pen-to-square"></i>
+                <i class="ms-1 fa-regular fa-trash-can"></i>
+            </div>
+            <div class="todo p-2 my-1 add-todo">
+                <i class="fa-solid fa-plus"></i>
+            </div>
+        </main>
+    </div>
 </body>
 </html>

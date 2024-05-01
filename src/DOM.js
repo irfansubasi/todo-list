@@ -8,12 +8,20 @@ export const domManipulator = () => {
         createForm("project");
     });
 
-    const buttons = document.querySelectorAll(".add-task");
-    buttons.forEach((button) => {
-        button.addEventListener("click", () => {
-            createForm("task", button);
-        })
-    })
+    // const buttons = document.querySelectorAll(".add-task");
+    // buttons.forEach((button) => {
+    //     button.addEventListener("click", () => {
+            
+    //     })
+    // })
+
+    const projectSection = document.querySelector(".project-section");
+
+    projectSection.addEventListener("click", (event) => {
+    if (event.target.classList.contains("add-task")) {
+        createForm("task", event.target);
+    }
+    });
     
 }
 

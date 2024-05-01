@@ -371,7 +371,12 @@ ul {
 .project_head {
   display: flex;
   align-items: center;
+}
+.project_head i {
   cursor: pointer;
+}
+.project_head i:hover {
+  transform: scale(1.2);
 }
 
 .add-project {
@@ -434,6 +439,88 @@ ul {
 }
 .add-todo:hover {
   opacity: 0.5;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.input {
+  display: flex;
+  flex-direction: column;
+}
+.input label {
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+  color: #FF4F5A;
+}
+.input input {
+  height: 2rem;
+  border: solid 0.1rem #FF4F5A;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  padding: 0.5rem;
+}
+.input textarea {
+  padding: 0.5rem;
+  font-size: 1rem;
+  resize: none;
+  height: 5rem;
+  border: solid 0.1rem #FF4F5A;
+  border-radius: 0.5rem;
+}
+
+.radio-group {
+  display: flex;
+  justify-content: start;
+}
+.radio-group label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  flex-direction: row;
+  position: relative;
+  color: #6B6B6B;
+  background-color: #F9F9F9;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+.radio-group input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+
+.prioActive {
+  color: #ffffff !important;
+  background-color: #FF4F5A !important;
+  border-color: #FF4F5A !important;
+}
+
+.createBtn {
+  background-color: #FF4F5A;
+  color: #ffffff;
+  padding: 0.5rem;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+.createBtn:hover {
+  background-color: #ffffff;
+  color: #FF4F5A;
+  border: solid 0.1rem #FF4F5A;
+}
+
+dialog {
+  border-color: #FF4F5A;
+}
+dialog::backdrop {
+  backdrop-filter: blur(0.2rem);
 }
 
 /*# sourceMappingURL=main.css.map */

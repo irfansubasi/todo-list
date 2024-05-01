@@ -2,11 +2,11 @@ function addTask(button){
     const parentDiv1 = button.parentNode;
     const projectDiv = parentDiv1.parentNode;
 
-    const ul = document.createElement("ul");
-    ul.classList.add("ms-1");
+    const ul = projectDiv.querySelector("ul");
     projectDiv.appendChild(ul);
 
     const li = document.createElement("li");
+    li.setAttribute("data-priority", "mid");
     li.classList.add("mt-1");
     ul.appendChild(li);
 

@@ -61,7 +61,13 @@
 .project_head{
     display: flex;
     align-items: center;
-    cursor: pointer;
+
+    i{
+        cursor: pointer;
+        &:hover{
+            transform: scale(1.2);
+        }
+    }
 }
 
 .add-project{

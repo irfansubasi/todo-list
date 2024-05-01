@@ -1,0 +1,89 @@
+form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.input{
+    display: flex;
+    flex-direction: column;
+
+    & label{
+        margin-bottom: 0.5rem;
+        margin-top: 0.5rem;
+        color: $red-color;
+    }
+
+    & input{
+        height: 2rem;
+        border: solid 0.1rem $red-color;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        padding: 0.5rem;
+    }
+
+    & textarea{
+        padding: 0.5rem;
+        font-size: 1rem;
+        resize: none;
+        height: 5rem;
+        border: solid 0.1rem $red-color;
+        border-radius: 0.5rem;
+    }
+}
+
+.radio-group{
+
+    display: flex;
+    justify-content: start;
+
+    & label{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: fit-content;
+        flex-direction: row;
+        position: relative;
+        color: $grey-color;
+        background-color: $grey-light;
+        padding: 0.5rem;
+        cursor: pointer;
+    }
+
+    & input{
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+    }
+}
+
+.prioActive{
+    color: $white-color!important;
+    background-color: $red-color!important;
+    border-color: $red-color!important;
+}
+
+.createBtn{
+    background-color: $red-color;
+    color: $white-color;
+    padding: 0.5rem;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    &:hover{
+        background-color: $white-color;
+        color: $red-color;
+        border: solid 0.1rem $red-color;
+    }
+}
+
+dialog{
+
+    border-color: $red-color;
+
+    &::backdrop{
+        backdrop-filter: blur(0.2rem);
+    }
+}

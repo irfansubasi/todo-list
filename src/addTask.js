@@ -2,8 +2,14 @@ function addTask(button){
     const parentDiv1 = button.parentNode;
     const projectDiv = parentDiv1.parentNode;
 
-    const ul = projectDiv.querySelector("ul");
-    projectDiv.appendChild(ul);
+    
+    let ul = projectDiv.querySelector("ul");
+
+    if(!ul){
+        ul = document.createElement("ul");
+        ul.classList.add("ms-1", "task-list");
+        projectDiv.appendChild(ul);
+    }
 
     const radioGroup = document.querySelector(".radio-group");
     const activeLabel = Array.from(radioGroup.querySelectorAll("label")).find(label => label.classList.contains("prioActive"));

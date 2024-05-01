@@ -5,8 +5,12 @@ function addTask(button){
     const ul = projectDiv.querySelector("ul");
     projectDiv.appendChild(ul);
 
+    const radioGroup = document.querySelector(".radio-group");
+    const activeLabel = Array.from(radioGroup.querySelectorAll("label")).find(label => label.classList.contains("prioActive"));
+    const inputValue = activeLabel ? activeLabel.querySelector("input").value : null;
+
     const li = document.createElement("li");
-    li.setAttribute("data-priority", "mid");
+    li.setAttribute("data-priority", inputValue);
     li.classList.add("mt-1");
     ul.appendChild(li);
 

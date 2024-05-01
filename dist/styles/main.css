@@ -457,6 +457,11 @@ form {
   margin-top: 0.5rem;
   color: #FF4F5A;
 }
+.input > span {
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+  color: #FF4F5A;
+}
 .input input {
   height: 2rem;
   border: solid 0.1rem #FF4F5A;

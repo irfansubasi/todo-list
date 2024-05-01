@@ -11,26 +11,14 @@ function createForm(type, button){
     const taskForm = `
     <div class="input title-input">
         <label for="titleInput">
-            <h3>Project Title</h3>
+            <h3>Task Name</h3>
         </label>
         <input type="text" id="titleInput">
     </div>
-    <div class="input desc-input">
-        <label for="descInput">
-            <h3>Desc</h3>
-        </label>
-        <textarea id="descInput" cols="30" rows="10" maxlength="100"></textarea>
-    </div>
-    <div class="input due-date">
-        <label for="dateInput">
-            <h3>Due Date</h3>
-        </label>
-        <input type="date" id="dateInput">
-    </div>
     <div class="input priority">
-        <label for="priorityInput">
+        <span>
             <h3>Priority</h3>
-        </label>
+        </span>
         <div class="radio-group">
             <label class="lowPrioLabel prioActive" for="lowPrio">
                 <span>Low</span>
@@ -49,13 +37,57 @@ function createForm(type, button){
         </div>  
     </div>
     <button class="createBtn mt-1">Create</button>
-    `
+    `;
+
     const projectForm = `
     <div class="input title-input">
         <label for="titleInput">
             <h3>Project Title</h3>
         </label>
         <input type="text" id="titleInput">
+    </div>
+    <button class="createBtn mt-1">Create</button>
+    `;
+
+    const detailForm = `
+    <div class="input title-input">
+        <label for="titleInput">
+            <h3>Project Title</h3>
+        </label>
+        <input type="text" id="titleInput">
+    </div>
+    <div class="input desc-input">
+        <label for="descInput">
+            <h3>Desc</h3>
+        </label>
+        <textarea id="descInput" cols="30" rows="10" maxlength="100"></textarea>
+    </div>
+    <div class="input due-date">
+        <label for="dateInput">
+            <h3>Due Date</h3>
+        </label>
+        <input type="date" id="dateInput">
+    </div>
+    <div class="input priority">
+        <span>
+            <h3>Priority</h3>
+        </span>
+        <div class="radio-group">
+            <label class="lowPrioLabel prioActive" for="lowPrio">
+                <span>Low</span>
+                <input type="radio" name="priority" id="lowPrio" value="low" checked>
+            </label>
+            
+            <label class="midPrioLabel" for="midPrio">
+                <span>Medium</span>
+                <input type="radio" name="priority" id="midPrio" value="mid">
+            </label>
+            
+            <label class="highPrioLabel" for="highPrio">
+                <span>High</span>
+                <input type="radio" name="priority" id="highPrio" value="high">
+            </label>
+        </div>  
     </div>
     <button class="createBtn mt-1">Create</button>
     `;
@@ -103,12 +135,28 @@ function createForm(type, button){
         const form = dialog.querySelector("form");
         if(form.id == "project-form"){
             addProject();
+            sortPriority();
         }else if(form.id == "task-form"){
             addTask(button);
+            sortPriority();
         }
         dialog.close();
     });
 
+    
+
+    function sortPriority(){
+        const lists = document.querySelectorAll('.task-list');
+
+        lists.forEach((list) => {
+            const items = Array.from(list.querySelectorAll('li'));
+            items.sort((a, b) => {
+                const priorities = ['high', 'mid', 'low'];
+                return priorities.indexOf(a.getAttribute('data-priority')) - priorities.indexOf(b.getAttribute('data-priority'));
+            });
+            items.forEach(item => list.appendChild(item));
+        })
+    }
     
     
 }

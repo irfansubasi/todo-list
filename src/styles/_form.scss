@@ -15,6 +15,12 @@ form{
         color: $red-color;
     }
 
+    & > span{
+        margin-bottom: 0.5rem;
+        margin-top: 0.5rem;
+        color: $red-color;
+    }
+
     & input{
         height: 2rem;
         border: solid 0.1rem $red-color;

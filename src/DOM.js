@@ -8,13 +8,6 @@ export const domManipulator = () => {
         createForm("project");
     });
 
-    // const buttons = document.querySelectorAll(".add-task");
-    // buttons.forEach((button) => {
-    //     button.addEventListener("click", () => {
-            
-    //     })
-    // })
-
     const projectSection = document.querySelector(".project-section");
 
     projectSection.addEventListener("click", (event) => {
@@ -22,6 +15,8 @@ export const domManipulator = () => {
         createForm("task", event.target);
     }
     });
+
+    
     
 }
 

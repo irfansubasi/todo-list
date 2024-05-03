@@ -17,9 +17,8 @@ function tasks(){
         if(!existingTask){
             const task = new Task(title, priority);
             projects.projectList[projectIndex].tasks.push(task);
-            console.log(projects.projectList)
             sortTaskList(projectIndex);
-            dom().handleTasks(title,priority);
+            dom().handleTasks(title,priority,projectIndex);
         }
     }
 

@@ -24,11 +24,9 @@ const dom = () => {
         createForm("task");
         dialog.showModal();
         
-        const firstDiv = event.target.parentNode;
-        const projectDiv = firstDiv.parentNode;
-
-        const idParts = projectDiv.id.split("-");
-        projectIndex = idParts[1];
+        const projectDiv = event.target.parentNode.parentNode;
+        const projectId = projectDiv.id.split("-")[1];
+        projectIndex = parseInt(projectId);
     }
     });
 
@@ -215,10 +213,9 @@ const dom = () => {
         projectHead.appendChild(icon);
     }
 
-    function handleTasks(input,priority){
-        const projectDiv = document.querySelector(`#project-${projectIndex}`);
-
-        
+    function handleTasks(input,priority,index){
+        const projectDiv = document.querySelector(`#project-${index}`);
+       
         let ul = projectDiv.querySelector(".task-list");
 
         if(!ul){

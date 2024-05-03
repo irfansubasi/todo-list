@@ -13,11 +13,14 @@ function tasks(){
 
 
     function addTask(title, priority, projectIndex){
-        const task = new Task(title, priority);
-        projects.projectList[projectIndex].tasks.push(task);
-        console.log(projects.projectList)
-        sortTaskList(projectIndex);
-        dom().handleTasks(title,priority);
+        const existingTask = projects.projectList[projectIndex].tasks.find((task) => task.title === title);
+        if(!existingTask){
+            const task = new Task(title, priority);
+            projects.projectList[projectIndex].tasks.push(task);
+            console.log(projects.projectList)
+            sortTaskList(projectIndex);
+            dom().handleTasks(title,priority);
+        }
     }
 
     function sortTaskList(projectIndex){

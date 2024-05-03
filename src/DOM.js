@@ -219,7 +219,7 @@ const dom = () => {
         const projectDiv = document.querySelector(`#project-${projectIndex}`);
 
         
-        let ul = projectDiv.querySelector("ul");
+        let ul = projectDiv.querySelector(".task-list");
 
         if(!ul){
             ul = document.createElement("ul");

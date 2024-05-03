@@ -64,9 +64,13 @@ class Project{
 }
 
 function addProject(title){
-    const project = new Project(title);
-    projectList.push(project);
-    dom().handleProjects();
+    const existingProject = projects.projectList.find((project) => project.title === title);
+    if(!existingProject){
+        const project = new Project(title);
+        projectList.push(project);
+        dom().handleProjects();
+    }
+    
 }
 
 

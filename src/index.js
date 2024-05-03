@@ -1,4 +1,4 @@
 import "./styles/main.scss";
-import { domManipulator } from "./DOM";
+import dom from "./DOM";
 
-domManipulator();
+dom();

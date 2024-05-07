@@ -7,7 +7,14 @@ const dom = () => {
     const form = dialog.querySelector("form");
     const addProjectBtn = document.querySelector(".add-project");
     const projectSection = document.querySelector(".project-section");
+    const taskButtons = projectSection.querySelectorAll("li");
     let projectIndex = 0;
+
+    taskButtons.forEach((button) => {
+        button.addEventListener("click", (e) =>{
+            updateScreen(e);
+        })
+    })
 
     //EVENT LISTENERS
 
@@ -98,7 +105,7 @@ const dom = () => {
         <button class="createBtn mt-1">Create</button>
         `;
     
-        const detailForm = `
+        const stepsForm = `
         <div class="input title-input">
             <label for="titleInput">
                 <h3>Project Title</h3>
@@ -245,6 +252,58 @@ const dom = () => {
             });
             items.forEach(item => list.appendChild(item));
         })
+    }
+
+
+
+    function updateScreen(e){
+        const main = document.querySelector(".content");
+        main.innerHTML = ``;
+        const header = document.createElement("h2");
+        header.id = `project-head`;
+        main.appendChild(header);
+        const taskHeading = main.querySelector("#project-head")
+        const projectDiv = e.target.closest("div[id^='project-']");
+        const index = projectDiv.id.split("-")[1];
+
+        const tasks = projects.projectList[index].tasks[0];
+
+        ;
+        taskHeading.textContent = tasks.title;
+
+        const todo = `
+            <div class="todo_checkbox"></div>
+            <div class="todo_text ms-1">
+                <span class="todo_text-head"></span>
+                <span class="todo_text-desc"></span>
+            </div>
+            <span class="ms-auto todo_date">Aug 9th</span>
+            <i class="ms-1 fa-regular fa-pen-to-square"></i>
+            <i class="ms-1 fa-regular fa-trash-can"></i>
+        `;
+
+
+        for( let i = 0; i < tasks.steps.length; i++){
+            const todoDiv = document.createElement("div");
+            todoDiv.classList.add("todo", "p-2", "my-1");
+            todoDiv.innerHTML = todo;
+            main.appendChild(todoDiv);
+            let todoHead = todoDiv.querySelector(".todo_text-head");
+            let todoDesc = todoDiv.querySelector(".todo_text-desc");
+            let todoDate = todoDiv.querySelector(".todo_date").textContent;
+
+            todoHead.textContent = tasks.steps[i].title;
+            todoDesc.textContent = tasks.steps[i].desc;
+        }
+
+
+        const addToDo = document.createElement("div");
+        addToDo.classList.add("todo", "p-2", "my-1", "add-todo");
+        const addToDoIcon = document.createElement("i");
+        addToDoIcon.classList.add("fa-solid", "fa-plus");
+        main.appendChild(addToDo);
+        addToDo.appendChild(addToDoIcon);
+        
     }
     
     return{

@@ -93,3 +93,9 @@ dialog{
         backdrop-filter: blur(0.2rem);
     }
 }
+
+#completeGroup{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}

@@ -1,5 +1,6 @@
 import projects from "./projects";
 import tasks from "./tasks";
+import steps from "./steps";
 
 const dom = () => {
 
@@ -8,6 +9,7 @@ const dom = () => {
     const addProjectBtn = document.querySelector(".add-project");
     const projectSection = document.querySelector(".project-section");
     const taskButtons = projectSection.querySelectorAll("li");
+    const main = document.querySelector(".content");
     let projectIndex = 0;
 
     taskButtons.forEach((button) => {
@@ -27,25 +29,41 @@ const dom = () => {
     
     //add task button
     projectSection.addEventListener("click", (event) => {
-    if (event.target.classList.contains("add-task")) {
-        createForm("task");
-        dialog.showModal();
-        
-        const projectDiv = event.target.parentNode.parentNode;
-        const projectId = projectDiv.id.split("-")[1];
-        projectIndex = parseInt(projectId);
-    }
+        if (event.target.classList.contains("add-task")) {
+            createForm("task");
+            dialog.showModal();
+            
+            const projectDiv = event.target.parentNode.parentNode;
+            const projectId = projectDiv.id.split("-")[1];
+            projectIndex = parseInt(projectId);
+        }
+    });
+
+    //add steps button
+    main.addEventListener("click", (event) => {
+        if (event.target.classList.contains("add-todo")) {
+            createForm("steps");
+            dialog.showModal();
+        }
     });
 
     //create button
-    dialog.addEventListener("click", (e) => {
-        if(e.target.classList.contains("createBtn")){
+    // form.addEventListener("click", (event) => {
+    //     if (event.target.classList.contains("createBtn")) {
+    //         handleCreateBtnClick(event);
+    //     }
+    // });
 
+    form.addEventListener("click", handleCreateBtnClick);
+
+    //create button manipulation
+    function handleCreateBtnClick(e) {
+
+        if (e.target.classList.contains("createBtn")) {
             e.preventDefault();
 
             const input = form.querySelector("input").value;
             
-
             if(form.id == "project-form"){
                 projects.addProject(input);
                 sortPriority();
@@ -55,14 +73,51 @@ const dom = () => {
                 const priorityValue = activeLabel ? activeLabel.querySelector("input").value : null;
                 tasks().addTask(input, priorityValue, projectIndex);
                 sortPriority();
+            }else if (form.id == "steps-form") {
+                const mainTitle = document.querySelector("#project-head").textContent;
+                const title = form.querySelector("#titleInput").value;
+                const desc = form.querySelector("#descInput").value;
+                const date = form.querySelector("#dateInput").value;
+                const completed = form.querySelector("#isCompleted").classList.contains("todo_checkbox_checked") ? true : false;
+                steps().addStep(title, desc, date, completed, mainTitle);
             }
             dialog.close();
         }
-    });
+        
+    }
 
+    //checkbox manipulation
+    function handleCheckboxClick(event) {
+        const target = event.target;
+        if (target.classList.contains("todo_checkbox") || target.classList.contains("todo_checkbox_checked")) {
+            target.classList.toggle("todo_checkbox");
+            target.classList.toggle("todo_checkbox_checked");
+        }
+    };
+
+    main.addEventListener("click", handleCheckboxClick);
+    dialog.addEventListener("click", handleCheckboxClick);
+
+    function rebindCheckboxEventListener() {
+        console.log("çalıştım")
+        const checkboxes = document.querySelectorAll(".todo_checkbox, .todo_checkbox_checked");
+        checkboxes.forEach(checkbox => {
+            checkbox.removeEventListener("click", handleCheckboxClick);
+            checkbox.addEventListener("click", handleCheckboxClick);
+        });
+    };
+
+    function rebindCreateBtnEventListener() {
+        form.removeEventListener("click", handleCreateBtnClick);
+        form.addEventListener("click", handleCreateBtnClick);
+    }
+
+    rebindCheckboxEventListener();
+    rebindCreateBtnEventListener();
 
     //createForm
     function createForm(type){
+        form.innerHTML = ``;
         
         const taskForm = `
         <div class="input title-input">
@@ -124,29 +179,13 @@ const dom = () => {
             </label>
             <input type="date" id="dateInput">
         </div>
-        <div class="input priority">
-            <span>
-                <h3>Priority</h3>
-            </span>
-            <div class="radio-group">
-                <label class="lowPrioLabel prioActive" for="lowPrio">
-                    <span>Low</span>
-                    <input type="radio" name="priority" id="lowPrio" value="low" checked>
-                </label>
-                
-                <label class="midPrioLabel" for="midPrio">
-                    <span>Medium</span>
-                    <input type="radio" name="priority" id="midPrio" value="mid">
-                </label>
-                
-                <label class="highPrioLabel" for="highPrio">
-                    <span>High</span>
-                    <input type="radio" name="priority" id="highPrio" value="high">
-                </label>
-            </div>  
+        <div id="completeGroup" class="mt-1">
+            <div id="isCompleted" class="todo_checkbox_checked"></div>
+            <span class="ms-1">Completed</span>
         </div>
         <button class="createBtn mt-1">Create</button>
         `;
+
     
         if(type == "project"){
             form.innerHTML = projectForm;
@@ -170,6 +209,9 @@ const dom = () => {
             high.addEventListener("click", function(){
                 setActiveButton(high);
             })
+        }else if(type == "steps"){
+            form.innerHTML = stepsForm;
+            form.id = "steps-form";
         }
     
         function setActiveButton(label){
@@ -241,6 +283,44 @@ const dom = () => {
         li.appendChild(span);
     }
 
+    function handleSteps(title, desc, date, completed){
+        const todo = document.createElement("div");
+        todo.classList.add("todo", "p-2", "my-1");
+        const todoAdd = main.querySelector(".add-todo");
+        main.insertBefore(todo, todoAdd);
+
+        const todoCheckbox = document.createElement("div");
+        todoCheckbox.classList.add(completed ? "todo_checkbox_checked" : "todo_checkbox");
+        todo.appendChild(todoCheckbox);
+
+        const todoText = document.createElement("div");
+        todoText.classList.add("todo_text", "ms-1");
+        todo.appendChild(todoText);
+
+        const todoHead = document.createElement("span");
+        todoHead.classList.add("todo_text-head");
+        todoHead.textContent = title;
+        todoText.appendChild(todoHead);
+
+        const todoDesc = document.createElement("span");
+        todoDesc.classList.add("todo_text-desc");
+        todoDesc.textContent = desc;
+        todoText.appendChild(todoDesc);
+
+        const todoDate = document.createElement("span");
+        todoDate.classList.add("ms-auto", "todo_date");
+        todoDate.textContent = date;
+        todo.appendChild(todoDate);
+
+        const editIcon = document.createElement("i");
+        editIcon.classList.add("ms-1", "fa-regular", "fa-pen-to-square");
+        todo.appendChild(editIcon);
+
+        const trashIcon = document.createElement("i");
+        trashIcon.classList.add("ms-1", "fa-regular", "fa-trash-can");
+        todo.appendChild(trashIcon);
+    }
+
     function sortPriority(){
         const lists = document.querySelectorAll('.task-list');
 
@@ -253,11 +333,9 @@ const dom = () => {
             items.forEach(item => list.appendChild(item));
         })
     }
-
-
+    
 
     function updateScreen(e){
-        const main = document.querySelector(".content");
         main.innerHTML = ``;
         const header = document.createElement("h2");
         header.id = `project-head`;
@@ -267,8 +345,6 @@ const dom = () => {
         const index = projectDiv.id.split("-")[1];
 
         const tasks = projects.projectList[index].tasks[0];
-
-        ;
         taskHeading.textContent = tasks.title;
 
         const todo = `
@@ -277,7 +353,7 @@ const dom = () => {
                 <span class="todo_text-head"></span>
                 <span class="todo_text-desc"></span>
             </div>
-            <span class="ms-auto todo_date">Aug 9th</span>
+            <span class="ms-auto todo_date"></span>
             <i class="ms-1 fa-regular fa-pen-to-square"></i>
             <i class="ms-1 fa-regular fa-trash-can"></i>
         `;
@@ -290,10 +366,20 @@ const dom = () => {
             main.appendChild(todoDiv);
             let todoHead = todoDiv.querySelector(".todo_text-head");
             let todoDesc = todoDiv.querySelector(".todo_text-desc");
-            let todoDate = todoDiv.querySelector(".todo_date").textContent;
+            let todoDate = todoDiv.querySelector(".todo_date");
+            let todoCheckbox = todoDiv.querySelector(".todo_checkbox");
 
             todoHead.textContent = tasks.steps[i].title;
             todoDesc.textContent = tasks.steps[i].desc;
+            todoDate.textContent = tasks.steps[i].date;
+
+            if (tasks.steps[i].completed) {
+                todoCheckbox.classList.add("todo_checkbox_checked");
+                todoCheckbox.classList.remove("todo_checkbox");
+            } else {
+                todoCheckbox.classList.add("todo_checkbox");
+                todoCheckbox.classList.remove("todo_checkbox_checked");
+            }
         }
 
 
@@ -309,6 +395,9 @@ const dom = () => {
     return{
         handleProjects,
         handleTasks,
+        handleSteps,
+        rebindCheckboxEventListener,
+        rebindCreateBtnEventListener,
     }
 }
 

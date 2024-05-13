@@ -121,6 +121,21 @@ const dom = () => {
         }else if(target.classList.contains("todo_checkbox_checked")){
             target.parentNode.style.opacity = "0.5";
         }
+
+        const taskTitle = target.parentNode.querySelector('.todo_text .todo_text-head');
+
+        for (let project of projects.projectList) {
+            for (let task of project.tasks) {
+                for (let step of task.steps) {
+                    // Eğer step'in title'ı taskTitle ile eşleşiyorsa
+                    if (step.title === taskTitle.textContent) {
+                        // Checkbox'ın durumuna göre step'in completed değerini güncelle
+                        step.completed = target.classList.contains("todo_checkbox_checked");
+                    }
+                }
+            }
+        }
+        localStorage.setItem('projects', JSON.stringify(projects.projectList));
     };
 
     function watchCheckboxStatus() {
@@ -459,7 +474,7 @@ const dom = () => {
         addToDoIcon.classList.add("fa-solid", "fa-plus");
         main.appendChild(addToDo);
         addToDo.appendChild(addToDoIcon);
-        
+        watchCheckboxStatus();
     }
 
     return{

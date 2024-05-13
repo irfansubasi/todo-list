@@ -28,6 +28,7 @@ function steps(){
                     if (!stepExists) {
                         task.steps.push(new Step(title, desc, date, completed));
                         dom().handleSteps(title, desc, date, completed);
+                        dom().bindCheckboxClickEvent();
                     }
                 }
             });

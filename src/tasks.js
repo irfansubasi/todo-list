@@ -19,6 +19,7 @@ function tasks(){
             projects.projectList[projectIndex].tasks.push(task);
             sortTaskList(projectIndex);
             dom().handleTasks(title,priority,projectIndex);
+            dom().bindCheckboxClickEvent();
         }
     }
 

@@ -4,6 +4,13 @@ import steps from "./steps";
 
 const dom = () => {
 
+    window.onload = function() {
+        const activeOne = document.querySelector('.active');
+        updateMain({ target: activeOne });
+        updateProjects();
+        watchCheckboxStatus();
+    };
+
     const dialog = document.querySelector("dialog");
     const form = dialog.querySelector("form");
     const addProjectBtn = document.querySelector(".add-project");
@@ -14,7 +21,7 @@ const dom = () => {
 
     taskButtons.forEach((button) => {
         button.addEventListener("click", (e) =>{
-            updateScreen(e);
+            updateMain(e);
         })
     })
 
@@ -47,13 +54,6 @@ const dom = () => {
         }
     });
 
-    //create button
-    // form.addEventListener("click", (event) => {
-    //     if (event.target.classList.contains("createBtn")) {
-    //         handleCreateBtnClick(event);
-    //     }
-    // });
-
     form.addEventListener("click", handleCreateBtnClick);
 
     //create button manipulation
@@ -82,9 +82,21 @@ const dom = () => {
                 steps().addStep(title, desc, date, completed, mainTitle);
             }
             dialog.close();
+            watchCheckboxStatus();
+
+            form.removeEventListener("click", handleCreateBtnClick);
         }
         
     }
+
+    function bindCheckboxClickEvent() {
+        main.removeEventListener("click", handleCheckboxClick);
+        form.removeEventListener("click", handleCheckboxClick);
+        main.addEventListener("click", handleCheckboxClick);
+        form.addEventListener("click", handleCheckboxClick);
+    }
+
+    bindCheckboxClickEvent();
 
     //checkbox manipulation
     function handleCheckboxClick(event) {
@@ -93,27 +105,21 @@ const dom = () => {
             target.classList.toggle("todo_checkbox");
             target.classList.toggle("todo_checkbox_checked");
         }
+        if(target.classList.contains("todo_checkbox")){
+            target.parentNode.style.opacity = "1";
+        }else if(target.classList.contains("todo_checkbox_checked")){
+            target.parentNode.style.opacity = "0.5";
+        }
     };
 
-    main.addEventListener("click", handleCheckboxClick);
-    dialog.addEventListener("click", handleCheckboxClick);
-
-    function rebindCheckboxEventListener() {
-        console.log("çalıştım")
-        const checkboxes = document.querySelectorAll(".todo_checkbox, .todo_checkbox_checked");
-        checkboxes.forEach(checkbox => {
-            checkbox.removeEventListener("click", handleCheckboxClick);
-            checkbox.addEventListener("click", handleCheckboxClick);
+    function watchCheckboxStatus() {
+        const checkedItems = document.querySelectorAll('.todo_checkbox_checked');
+        checkedItems.forEach(function(item) {
+            item.parentNode.style.opacity = "0.5";
         });
-    };
-
-    function rebindCreateBtnEventListener() {
-        form.removeEventListener("click", handleCreateBtnClick);
-        form.addEventListener("click", handleCreateBtnClick);
     }
 
-    rebindCheckboxEventListener();
-    rebindCreateBtnEventListener();
+
 
     //createForm
     function createForm(type){
@@ -334,8 +340,50 @@ const dom = () => {
         })
     }
     
+    function updateProjects(){
+        projectSection.innerHTML = ``;
+        const projectList = projects.projectList;
 
-    function updateScreen(e){
+        for(let i = 0; i < projectList.length; i++){
+            const project = projectList[i];
+            const projectDiv = document.createElement("div");
+            projectDiv.id = `project-${i}`;
+            projectDiv.classList.add("mt-1");
+            projectSection.appendChild(projectDiv);
+
+            const projectHead = document.createElement("div");
+            projectHead.classList.add("project_head");
+            projectDiv.appendChild(projectHead);
+
+            const h3 = document.createElement("h3");
+            h3.textContent = project.title;
+            projectHead.appendChild(h3);
+
+            const icon = document.createElement("i");
+            icon.classList.add("fa-solid", "fa-plus", "ms-auto", "add-task");
+            projectHead.appendChild(icon);
+
+            const taskList = document.createElement("ul");
+            taskList.classList.add("ms-1", "task-list");
+            projectDiv.appendChild(taskList);
+
+            const tasks = project.tasks;
+            for(let j = 0; j < tasks.length; j++){
+                const task = tasks[j];
+                const li = document.createElement("li");
+                li.setAttribute("data-priority", task.priority);
+                li.classList.add("mt-1");
+                taskList.appendChild(li);
+
+                const span = document.createElement("span");
+                span.textContent = task.title;
+                li.appendChild(span);
+            }
+        }
+    }
+
+    function updateMain(e){
+        
         main.innerHTML = ``;
         const header = document.createElement("h2");
         header.id = `project-head`;
@@ -391,13 +439,12 @@ const dom = () => {
         addToDo.appendChild(addToDoIcon);
         
     }
-    
+
     return{
         handleProjects,
         handleTasks,
         handleSteps,
-        rebindCheckboxEventListener,
-        rebindCreateBtnEventListener,
+        bindCheckboxClickEvent,
     }
 }
 

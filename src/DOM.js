@@ -15,7 +15,6 @@ const dom = () => {
     const form = dialog.querySelector("form");
     const addProjectBtn = document.querySelector(".add-project");
     const projectSection = document.querySelector(".project-section");
-    const taskButtons = projectSection.querySelectorAll("li");
     const main = document.querySelector(".content");
     let projectIndex = 0;
 
@@ -392,7 +391,7 @@ const dom = () => {
                 li.appendChild(span);
 
                 if (i === 0 && j === 0) {
-                    span.classList.add("active");
+                    li.classList.add("active");
                 }
             }
         }
@@ -400,7 +399,13 @@ const dom = () => {
     }
 
     function updateMain(e){
-        console.log(e.target);
+        const listLis = projectSection.querySelectorAll("li");
+        listLis.forEach((button) => {
+            button.classList.remove("active");
+        });
+        const clickedLi = e.target.closest("li");
+        clickedLi.classList.add("active");
+
         main.innerHTML = ``;
         const header = document.createElement("h2");
         header.id = `project-head`;

@@ -19,12 +19,6 @@ const dom = () => {
     const main = document.querySelector(".content");
     let projectIndex = 0;
 
-    taskButtons.forEach((button) => {
-        button.addEventListener("click", (e) =>{
-            updateMain(e);
-        })
-    })
-
     //EVENT LISTENERS
 
     //add project button
@@ -52,6 +46,32 @@ const dom = () => {
             createForm("steps");
             dialog.showModal();
         }
+    });
+
+    taskButtons.forEach((button) => {
+        button.removeEventListener("click", (e) => {
+            updateMain(e);
+        });
+    });
+
+    function bindTaskButtonsClickEvent() {
+        const taskButtons = projectSection.querySelectorAll("li");
+        taskButtons.forEach((button) => {
+            button.removeEventListener("click", (e) => {
+                updateMain(e);
+            });
+        });
+        taskButtons.forEach((button) => {
+            button.addEventListener("click", (e) => {
+                updateMain(e);
+            });
+        });
+    }
+    
+    taskButtons.forEach((button) => {
+        button.addEventListener("click", (e) =>{
+            updateMain(e);
+        })
     });
 
     form.addEventListener("click", handleCreateBtnClick);
@@ -380,6 +400,7 @@ const dom = () => {
                 li.appendChild(span);
             }
         }
+        bindTaskButtonsClickEvent();
     }
 
     function updateMain(e){

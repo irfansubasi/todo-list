@@ -48,12 +48,6 @@ const dom = () => {
         }
     });
 
-    taskButtons.forEach((button) => {
-        button.removeEventListener("click", (e) => {
-            updateMain(e);
-        });
-    });
-
     function bindTaskButtonsClickEvent() {
         const taskButtons = projectSection.querySelectorAll("li");
         taskButtons.forEach((button) => {
@@ -67,12 +61,10 @@ const dom = () => {
             });
         });
     }
+
+    bindTaskButtonsClickEvent();
     
-    taskButtons.forEach((button) => {
-        button.addEventListener("click", (e) =>{
-            updateMain(e);
-        })
-    });
+    
 
     form.addEventListener("click", handleCreateBtnClick);
 
@@ -398,13 +390,17 @@ const dom = () => {
                 const span = document.createElement("span");
                 span.textContent = task.title;
                 li.appendChild(span);
+
+                if (i === 0 && j === 0) {
+                    span.classList.add("active");
+                }
             }
         }
         bindTaskButtonsClickEvent();
     }
 
     function updateMain(e){
-        
+        console.log(e.target);
         main.innerHTML = ``;
         const header = document.createElement("h2");
         header.id = `project-head`;
@@ -413,7 +409,7 @@ const dom = () => {
         const projectDiv = e.target.closest("div[id^='project-']");
         const index = projectDiv.id.split("-")[1];
 
-        const tasks = projects.projectList[index].tasks[0];
+        const tasks = projects.projectList[index].tasks.find(task => task.title === e.target.textContent);
         taskHeading.textContent = tasks.title;
 
         const todo = `

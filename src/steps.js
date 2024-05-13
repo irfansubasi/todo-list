@@ -27,6 +27,7 @@ function steps(){
                     
                     if (!stepExists) {
                         task.steps.push(new Step(title, desc, date, completed));
+                        localStorage.setItem('projects', JSON.stringify(projects.projectList));
                         dom().handleSteps(title, desc, date, completed);
                         dom().bindCheckboxClickEvent();
                     }

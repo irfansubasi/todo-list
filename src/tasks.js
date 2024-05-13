@@ -18,6 +18,7 @@ function tasks(){
             const task = new Task(title, priority);
             projects.projectList[projectIndex].tasks.push(task);
             sortTaskList(projectIndex);
+            localStorage.setItem('projects', JSON.stringify(projects.projectList));
             dom().handleTasks(title,priority,projectIndex);
             dom().bindCheckboxClickEvent();
         }

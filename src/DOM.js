@@ -16,6 +16,7 @@ const dom = () => {
     const addProjectBtn = document.querySelector(".add-project");
     const projectSection = document.querySelector(".project-section");
     const main = document.querySelector(".content");
+    const deleteBtns = document.querySelectorAll(".fa-trash-can");
     let projectIndex = 0;
 
     //EVENT LISTENERS
@@ -26,7 +27,6 @@ const dom = () => {
         dialog.showModal();
     });
 
-    
     //add task button
     projectSection.addEventListener("click", (event) => {
         if (event.target.classList.contains("add-task")) {
@@ -62,8 +62,33 @@ const dom = () => {
     }
 
     bindTaskButtonsClickEvent();
+
+    function handleDeleteBtnClick(e) {
+        if (e.target.classList.contains("fa-trash-can")) {
+            const todo = e.target.closest(".todo");
+            const todoHead = todo.querySelector(".todo_text-head");
+            const mainTitle = document.querySelector("#project-head").textContent;
+            steps().deleteStep(todoHead.textContent, mainTitle);
+            todo.remove();
+            //buraya bak
+        }
+    }
+
+    function bindDeleteBtnClickEvent() {
+        const deleteBtns = document.querySelectorAll(".fa-trash-can");
+        deleteBtns.forEach((btn) => {
+            btn.removeEventListener("click", (e) => {
+                handleDeleteBtnClick(e);
+            });
+        });
+        deleteBtns.forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+                handleDeleteBtnClick(e);
+            });
+        });
+    }
     
-    
+    bindDeleteBtnClickEvent();
 
     form.addEventListener("click", handleCreateBtnClick);
 
@@ -115,27 +140,29 @@ const dom = () => {
         if (target.classList.contains("todo_checkbox") || target.classList.contains("todo_checkbox_checked")) {
             target.classList.toggle("todo_checkbox");
             target.classList.toggle("todo_checkbox_checked");
-        }
-        if(target.classList.contains("todo_checkbox")){
-            target.parentNode.style.opacity = "1";
-        }else if(target.classList.contains("todo_checkbox_checked")){
-            target.parentNode.style.opacity = "0.5";
-        }
+            if(target.classList.contains("todo_checkbox")){
+                target.parentNode.style.opacity = "1";
+            }else if(target.classList.contains("todo_checkbox_checked")){
+                target.parentNode.style.opacity = "0.5";
+            }
+            const taskTitle = target.parentNode.querySelector('.todo_text .todo_text-head');
 
-        const taskTitle = target.parentNode.querySelector('.todo_text .todo_text-head');
-
-        for (let project of projects.projectList) {
-            for (let task of project.tasks) {
-                for (let step of task.steps) {
-                    // Eğer step'in title'ı taskTitle ile eşleşiyorsa
-                    if (step.title === taskTitle.textContent) {
-                        // Checkbox'ın durumuna göre step'in completed değerini güncelle
-                        step.completed = target.classList.contains("todo_checkbox_checked");
+            for (let project of projects.projectList) {
+                for (let task of project.tasks) {
+                    for (let step of task.steps) {
+                        // Eğer step'in title'ı taskTitle ile eşleşiyorsa
+                        if (step.title === taskTitle.textContent) {
+                            // Checkbox'ın durumuna göre step'in completed değerini güncelle
+                            step.completed = target.classList.contains("todo_checkbox_checked");
+                        }
                     }
                 }
             }
+            localStorage.setItem('projects', JSON.stringify(projects.projectList));
         }
-        localStorage.setItem('projects', JSON.stringify(projects.projectList));
+        
+
+        
     };
 
     function watchCheckboxStatus() {
@@ -474,6 +501,7 @@ const dom = () => {
         addToDoIcon.classList.add("fa-solid", "fa-plus");
         main.appendChild(addToDo);
         addToDo.appendChild(addToDoIcon);
+        bindDeleteBtnClickEvent();
         watchCheckboxStatus();
     }
 
@@ -482,6 +510,7 @@ const dom = () => {
         handleTasks,
         handleSteps,
         bindCheckboxClickEvent,
+        updateMain,
     }
 }
 

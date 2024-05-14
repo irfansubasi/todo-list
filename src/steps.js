@@ -36,10 +36,27 @@ function steps(){
         });
     }
 
+    function deleteStep(title, mainTitle){
+        const projectList = projects.projectList;
+        
+        projectList.forEach(project => {
+            project.tasks.forEach(task => {
+                if (task.title === mainTitle) {
+                    task.steps.forEach((step, index) => {
+                        if (step.title === title) {
+                            task.steps.splice(index, 1);
+                            localStorage.setItem('projects', JSON.stringify(projects.projectList));
+                        }
+                    });
+                }
+            });
+        });
+    }
     
 
     return{
         addStep,
+        deleteStep,
     }
 
 }

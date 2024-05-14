@@ -1,5 +1,6 @@
 import dom from "./DOM";
 import projects from "./projects";
+import steps from "./steps";
 
 function tasks(){
 
@@ -24,6 +25,15 @@ function tasks(){
         }
     }
 
+    function deleteTask(title, projectIndex){
+        const tasks = projects.projectList[projectIndex].tasks;
+        const taskIndex = tasks.findIndex((task) => task.title === title);
+        tasks.splice(taskIndex, 1);
+        projects.projectList[projectIndex].tasks = tasks;
+        localStorage.setItem('projects', JSON.stringify(projects.projectList));
+
+    }
+
     function sortTaskList(projectIndex){
         const tasks = projects.projectList[projectIndex].tasks;
         
@@ -39,6 +49,7 @@ function tasks(){
 
     return{
         addTask,
+        deleteTask,
     }
 }
 

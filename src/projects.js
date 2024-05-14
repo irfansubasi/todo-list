@@ -1,6 +1,6 @@
 import dom from "./DOM";
 const projects = (() => {
-
+    
     let projectList = [];
 
     if(localStorage.getItem("projects") === null){
@@ -82,10 +82,17 @@ const projects = (() => {
         
     }
 
+    function deleteProject(title){
+        const projectIndex = projectList.findIndex((project) => project.title === title);
+        projectList.splice(projectIndex, 1);
+        localStorage.setItem('projects', JSON.stringify(projectList));
+    }
+
 
     return {
         projectList,
         addProject,
+        deleteProject,
     }
 
 })();

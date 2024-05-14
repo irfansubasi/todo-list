@@ -5,9 +5,9 @@ import steps from "./steps";
 const dom = () => {
 
     window.onload = function() {
-        const activeOne = document.querySelector('.active');
-        updateMain({ target: activeOne });
         updateProjects();
+        const firstLi = projectSection.querySelector('li');
+        updateMain({ target: firstLi });
         watchCheckboxStatus();
     };
 
@@ -33,7 +33,7 @@ const dom = () => {
             createForm("task");
             dialog.showModal();
             
-            const projectDiv = event.target.parentNode.parentNode;
+            const projectDiv = event.target.parentNode.parentNode.parentNode;
             const projectId = projectDiv.id.split("-")[1];
             projectIndex = parseInt(projectId);
         }
@@ -65,12 +65,25 @@ const dom = () => {
 
     function handleDeleteBtnClick(e) {
         if (e.target.classList.contains("fa-trash-can")) {
-            const todo = e.target.closest(".todo");
-            const todoHead = todo.querySelector(".todo_text-head");
-            const mainTitle = document.querySelector("#project-head").textContent;
-            steps().deleteStep(todoHead.textContent, mainTitle);
-            todo.remove();
-            //buraya bak
+            if(e.target.parentNode.classList.contains("todo")){
+                const todo = e.target.closest(".todo");
+                const todoHead = todo.querySelector(".todo_text-head");
+                const mainTitle = document.querySelector("#project-head").textContent;
+                steps().deleteStep(todoHead.textContent, mainTitle);
+                todo.remove();
+            }else if(e.target.parentNode.parentNode.classList.contains("project_head")){
+                const projectHead = e.target.parentNode.parentNode;
+                const projectTitle = projectHead.querySelector("h3").textContent;
+                projects.deleteProject(projectTitle);
+                projectHead.parentNode.remove();
+            }else if(e.target.parentNode.classList.contains("project-head-group")){
+                const activeTask = projectSection.querySelector(".active");
+                const activeTaskTitle = activeTask.querySelector("span").textContent;
+                const projectIndex = activeTask.closest("div[id^='project-']").id.split("-")[1];
+                tasks().deleteTask(activeTaskTitle, projectIndex);
+                activeTask.remove();
+                main.innerHTML = ``;
+            }
         }
     }
 
@@ -150,9 +163,7 @@ const dom = () => {
             for (let project of projects.projectList) {
                 for (let task of project.tasks) {
                     for (let step of task.steps) {
-                        // Eğer step'in title'ı taskTitle ile eşleşiyorsa
                         if (step.title === taskTitle.textContent) {
-                            // Checkbox'ın durumuna göre step'in completed değerini güncelle
                             step.completed = target.classList.contains("todo_checkbox_checked");
                         }
                     }
@@ -315,10 +326,18 @@ const dom = () => {
         const input = document.getElementById("titleInput").value;
         h3.textContent = `${input}`;
         projectHead.appendChild(h3);
-        
-        const icon = document.createElement("i");
-        icon.classList.add("fa-solid", "fa-plus", "ms-auto", "add-task");
-        projectHead.appendChild(icon);
+
+        const iconDiv = document.createElement("div");
+        iconDiv.classList.add("ms-auto");
+        projectHead.appendChild(iconDiv);
+
+        const deleteIcon = document.createElement("i");
+        deleteIcon.classList.add("fa-regular", "fa-trash-can", "me-1");
+        iconDiv.appendChild(deleteIcon);
+
+        const addIcon = document.createElement("i");
+        addIcon.classList.add("fa-solid", "fa-plus", "add-task");
+        iconDiv.appendChild(addIcon);
     }
 
     function handleTasks(input,priority,index){
@@ -412,9 +431,17 @@ const dom = () => {
             h3.textContent = project.title;
             projectHead.appendChild(h3);
 
-            const icon = document.createElement("i");
-            icon.classList.add("fa-solid", "fa-plus", "ms-auto", "add-task");
-            projectHead.appendChild(icon);
+            const iconDiv = document.createElement("div");
+            iconDiv.classList.add("ms-auto");
+            projectHead.appendChild(iconDiv);
+
+            const deleteIcon = document.createElement("i");
+            deleteIcon.classList.add("fa-regular", "fa-trash-can", "me-1");
+            iconDiv.appendChild(deleteIcon);
+
+            const addIcon = document.createElement("i");
+            addIcon.classList.add("fa-solid", "fa-plus", "add-task");
+            iconDiv.appendChild(addIcon);
 
             const taskList = document.createElement("ul");
             taskList.classList.add("ms-1", "task-list");
@@ -441,7 +468,12 @@ const dom = () => {
     }
 
     function updateMain(e){
+        
         const listLis = projectSection.querySelectorAll("li");
+        if (listLis.length === 0) {
+            main.innerHTML = ``;
+            return;
+        }
         listLis.forEach((button) => {
             button.classList.remove("active");
         });
@@ -449,9 +481,18 @@ const dom = () => {
         clickedLi.classList.add("active");
 
         main.innerHTML = ``;
+        const headerDiv = document.createElement("div");
+        headerDiv.classList.add("project-head-group");
+        main.appendChild(headerDiv);
+
         const header = document.createElement("h2");
         header.id = `project-head`;
-        main.appendChild(header);
+        headerDiv.appendChild(header);
+
+        const deleteIcon = document.createElement("i");
+        deleteIcon.classList.add("fa-regular", "fa-trash-can", "ms-1");
+        headerDiv.appendChild(deleteIcon);
+        
         const taskHeading = main.querySelector("#project-head")
         const projectDiv = e.target.closest("div[id^='project-']");
         const index = projectDiv.id.split("-")[1];

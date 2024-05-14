@@ -1,4 +1,7 @@
-#project-head{
+.project-head-group{
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
     color: $red-color;
 }
 

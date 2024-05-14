@@ -1,6 +1,8 @@
 import projects from "./projects";
 import tasks from "./tasks";
 import steps from "./steps";
+import { format } from 'date-fns';
+
 
 const dom = () => {
 
@@ -387,7 +389,9 @@ const dom = () => {
 
         const todoDate = document.createElement("span");
         todoDate.classList.add("ms-auto", "todo_date");
-        todoDate.textContent = date;
+        const selectedDate = new Date(date);
+        const formattedDate = format(selectedDate, 'dd MMM yy');
+        todoDate.textContent = formattedDate;
         todo.appendChild(todoDate);
 
         const editIcon = document.createElement("i");
@@ -468,6 +472,8 @@ const dom = () => {
     }
 
     function updateMain(e){
+
+        
         
         const listLis = projectSection.querySelectorAll("li");
         if (listLis.length === 0) {
@@ -524,7 +530,10 @@ const dom = () => {
 
             todoHead.textContent = tasks.steps[i].title;
             todoDesc.textContent = tasks.steps[i].desc;
-            todoDate.textContent = tasks.steps[i].date;
+            const selectedDate = new Date(tasks.steps[i].date);
+            const formattedDate = format(selectedDate, 'dd MMM yy');
+            todoDate.textContent = formattedDate;
+            
 
             if (tasks.steps[i].completed) {
                 todoCheckbox.classList.add("todo_checkbox_checked");

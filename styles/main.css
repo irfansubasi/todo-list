@@ -391,7 +391,10 @@ ul {
   opacity: 0.5;
 }
 
-#project-head {
+.project-head-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
   color: #FF4F5A;
 }
 

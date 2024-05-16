@@ -82,6 +82,12 @@ const projects = (() => {
         
     }
 
+    function editProject(currentProject, title){
+        const projectIndex = projectList.findIndex((project) => project.title === currentProject);
+        projectList[projectIndex].title = title;
+        localStorage.setItem('projects', JSON.stringify(projectList));
+    }
+
     function deleteProject(title){
         const projectIndex = projectList.findIndex((project) => project.title === title);
         projectList.splice(projectIndex, 1);
@@ -93,6 +99,7 @@ const projects = (() => {
         projectList,
         addProject,
         deleteProject,
+        editProject,
     }
 
 })();

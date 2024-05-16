@@ -23,6 +23,7 @@ const dom = () => {
     let projectIndex = 0;
     let currentStep;
     let currentTask;
+    let currentProject;
 
     //EVENT LISTENERS
 
@@ -56,6 +57,10 @@ const dom = () => {
             }else if(e.target.parentNode.classList.contains("project-head-group")){
                 currentTask = main.querySelector("#project-head").textContent;
                 createForm("editTask");
+                dialog.showModal();
+            }else if(e.target.parentNode.parentNode.classList.contains("project_head")){
+                currentProject = e.target.parentNode.parentNode.querySelector("h3").textContent;
+                createForm("editProject");
                 dialog.showModal();
             }
         }
@@ -176,6 +181,9 @@ const dom = () => {
                 const activeTask = projectSection.querySelector(".active");
                 const projectIndex = activeTask.closest("div[id^='project-']").id.split("-")[1];
                 tasks().editTask(currentTask, input, priorityValue, projectIndex);
+            }else if(form.id == "editProject-form"){
+                const title = form.querySelector("#titleInput").value;
+                projects.editProject(currentProject, title);
             }
             dialog.close();
             form.removeEventListener("click", handleCreateBtnClick);
@@ -353,6 +361,9 @@ const dom = () => {
             high.addEventListener("click", function(){
                 setActiveButton(high);
             })
+        }else if(type == "editProject"){
+            form.innerHTML = projectForm;
+            form.id = "editProject-form";
         }
     
         function setActiveButton(label){
@@ -508,6 +519,10 @@ const dom = () => {
             const iconDiv = document.createElement("div");
             iconDiv.classList.add("ms-auto");
             projectHead.appendChild(iconDiv);
+
+            const editIcon = document.createElement("i");
+            editIcon.classList.add("fa-regular", "fa-pen-to-square", "me-1");
+            iconDiv.appendChild(editIcon);
 
             const deleteIcon = document.createElement("i");
             deleteIcon.classList.add("fa-regular", "fa-trash-can", "me-1");

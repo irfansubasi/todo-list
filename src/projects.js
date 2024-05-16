@@ -1,6 +1,6 @@
 import dom from "./DOM";
 const projects = (() => {
-    
+    localStorage.clear();
     let projectList = [];
 
     if(localStorage.getItem("projects") === null){
@@ -21,13 +21,13 @@ const projects = (() => {
                             {
                                 title: "Routing",
                                 desc: "Implementing page navigation using React Router.",
-                                date: "17-08-2024",
+                                date: "08-17-2024",
                                 completed: false
                             },
                             {
                                 title: "State Management",
                                 desc: "Understanding state and its importance",
-                                date: "20-08-2024",
+                                date: "08-20-2024",
                                 completed: true
                             }
                         ]
@@ -44,7 +44,7 @@ const projects = (() => {
                             {
                                 title: "Get pie",
                                 desc: "I have to get pie before party.",
-                                date: "15-08-2024",
+                                date: "08-15-2024",
                                 completed: false
                             },
                             {

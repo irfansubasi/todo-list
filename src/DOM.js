@@ -11,6 +11,7 @@ const dom = () => {
         const firstLi = projectSection.querySelector('li');
         updateMain({ target: firstLi });
         watchCheckboxStatus();
+        bindEditBtnClickEvent();
     };
 
     const dialog = document.querySelector("dialog");
@@ -20,6 +21,7 @@ const dom = () => {
     const main = document.querySelector(".content");
     const deleteBtns = document.querySelectorAll(".fa-trash-can");
     let projectIndex = 0;
+    let currentStep;
 
     //EVENT LISTENERS
 
@@ -40,6 +42,32 @@ const dom = () => {
             projectIndex = parseInt(projectId);
         }
     });
+
+
+    function handleEditBtnClick(e) {
+        if (e.target.classList.contains("fa-pen-to-square")) {
+            const todo = e.target.closest(".todo");
+            currentStep = todo.querySelector(".todo_text-head").textContent;
+            createForm("editStep");
+            dialog.showModal();
+            bindCheckboxClickEvent();
+        }
+    }
+    function bindEditBtnClickEvent(){
+        const editBtns = document.querySelectorAll(".fa-pen-to-square");
+        editBtns.forEach((btn) => {
+            btn.removeEventListener("click", (e) => {
+                handleEditBtnClick(e);
+            });
+        });
+        editBtns.forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+                handleEditBtnClick(e);
+            });
+        });
+    }
+
+    bindEditBtnClickEvent();
 
     //add steps button
     main.addEventListener("click", (event) => {
@@ -131,8 +159,16 @@ const dom = () => {
                 const date = form.querySelector("#dateInput").value;
                 const completed = form.querySelector("#isCompleted").classList.contains("todo_checkbox_checked") ? true : false;
                 steps().addStep(title, desc, date, completed, mainTitle);
+            }else if(form.id == "editStep-form"){
+                const mainTitle = document.querySelector("#project-head").textContent;
+                const title = form.querySelector("#titleInput").value;
+                const desc = form.querySelector("#descInput").value;
+                const date = form.querySelector("#dateInput").value;
+                const completed = form.querySelector("#isCompleted").classList.contains("todo_checkbox_checked") ? true : false;
+                steps().editStep(currentStep, title, desc, date, completed, mainTitle);
             }
             dialog.close();
+            updateMain({ target: document.querySelector(".active") });
             watchCheckboxStatus();
 
             form.removeEventListener("click", handleCreateBtnClick);
@@ -235,13 +271,13 @@ const dom = () => {
         const stepsForm = `
         <div class="input title-input">
             <label for="titleInput">
-                <h3>Project Title</h3>
+                <h3>Step Title</h3>
             </label>
             <input type="text" id="titleInput">
         </div>
         <div class="input desc-input">
             <label for="descInput">
-                <h3>Desc</h3>
+                <h3>Description</h3>
             </label>
             <textarea id="descInput" cols="30" rows="10" maxlength="100"></textarea>
         </div>
@@ -284,6 +320,9 @@ const dom = () => {
         }else if(type == "steps"){
             form.innerHTML = stepsForm;
             form.id = "steps-form";
+        }else if(type == "editStep"){
+            form.innerHTML = stepsForm;
+            form.id = "editStep-form";
         }
     
         function setActiveButton(label){
@@ -498,6 +537,10 @@ const dom = () => {
         const deleteIcon = document.createElement("i");
         deleteIcon.classList.add("fa-regular", "fa-trash-can", "ms-1");
         headerDiv.appendChild(deleteIcon);
+
+        const editIcon = document.createElement("i");
+        editIcon.classList.add("fa-regular", "fa-pen-to-square", "ms-1");
+        headerDiv.appendChild(editIcon);
         
         const taskHeading = main.querySelector("#project-head")
         const projectDiv = e.target.closest("div[id^='project-']");

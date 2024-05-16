@@ -52,11 +52,32 @@ function steps(){
             });
         });
     }
+
+    function editStep(currentStep, title, desc, date, completed, mainTitle){
+        const projectList = projects.projectList;
+        
+        projectList.forEach(project => {
+            project.tasks.forEach(task => {
+                if (task.title === mainTitle) {
+                    task.steps.forEach(step => {
+                        if(step.title === currentStep){
+                            step.title = title;
+                            step.desc = desc;
+                            step.date = date;
+                            step.completed = completed;
+                            localStorage.setItem('projects', JSON.stringify(projects.projectList));
+                        }
+                    });
+                }
+            });
+        });
+    }
     
 
     return{
         addStep,
         deleteStep,
+        editStep,
     }
 
 }

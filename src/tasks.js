@@ -34,6 +34,15 @@ function tasks(){
 
     }
 
+    function editTask(currentTask, title, priority, projectIndex){
+        const tasks = projects.projectList[projectIndex].tasks;
+        const taskIndex = tasks.findIndex((task) => task.title === currentTask);
+        tasks[taskIndex].title = title;
+        tasks[taskIndex].priority = priority;
+        projects.projectList[projectIndex].tasks = tasks;
+        localStorage.setItem('projects', JSON.stringify(projects.projectList));
+    }
+
     function sortTaskList(projectIndex){
         const tasks = projects.projectList[projectIndex].tasks;
         
@@ -50,6 +59,7 @@ function tasks(){
     return{
         addTask,
         deleteTask,
+        editTask,
     }
 }
 

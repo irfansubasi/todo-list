@@ -22,6 +22,7 @@ const dom = () => {
     const deleteBtns = document.querySelectorAll(".fa-trash-can");
     let projectIndex = 0;
     let currentStep;
+    let currentTask;
 
     //EVENT LISTENERS
 
@@ -46,11 +47,17 @@ const dom = () => {
 
     function handleEditBtnClick(e) {
         if (e.target.classList.contains("fa-pen-to-square")) {
-            const todo = e.target.closest(".todo");
-            currentStep = todo.querySelector(".todo_text-head").textContent;
-            createForm("editStep");
-            dialog.showModal();
-            bindCheckboxClickEvent();
+            if(e.target.parentNode.classList.contains("todo")){
+                const todo = e.target.closest(".todo");
+                currentStep = todo.querySelector(".todo_text-head").textContent;
+                createForm("editStep");
+                dialog.showModal();
+                bindCheckboxClickEvent();
+            }else if(e.target.parentNode.classList.contains("project-head-group")){
+                currentTask = main.querySelector("#project-head").textContent;
+                createForm("editTask");
+                dialog.showModal();
+            }
         }
     }
     function bindEditBtnClickEvent(){
@@ -133,8 +140,6 @@ const dom = () => {
     
     bindDeleteBtnClickEvent();
 
-    form.addEventListener("click", handleCreateBtnClick);
-
     //create button manipulation
     function handleCreateBtnClick(e) {
 
@@ -145,13 +150,11 @@ const dom = () => {
             
             if(form.id == "project-form"){
                 projects.addProject(input);
-                sortPriority();
             }else if(form.id == "task-form"){
                 const radioGroup = document.querySelector(".radio-group");
                 const activeLabel = Array.from(radioGroup.querySelectorAll("label")).find(label => label.classList.contains("prioActive"));
                 const priorityValue = activeLabel ? activeLabel.querySelector("input").value : null;
                 tasks().addTask(input, priorityValue, projectIndex);
-                sortPriority();
             }else if (form.id == "steps-form") {
                 const mainTitle = document.querySelector("#project-head").textContent;
                 const title = form.querySelector("#titleInput").value;
@@ -166,12 +169,21 @@ const dom = () => {
                 const date = form.querySelector("#dateInput").value;
                 const completed = form.querySelector("#isCompleted").classList.contains("todo_checkbox_checked") ? true : false;
                 steps().editStep(currentStep, title, desc, date, completed, mainTitle);
+            }else if(form.id == "editTask-form"){
+                const radioGroup = document.querySelector(".radio-group");
+                const activeLabel = Array.from(radioGroup.querySelectorAll("label")).find(label => label.classList.contains("prioActive"));
+                const priorityValue = activeLabel ? activeLabel.querySelector("input").value : null;
+                const activeTask = projectSection.querySelector(".active");
+                const projectIndex = activeTask.closest("div[id^='project-']").id.split("-")[1];
+                tasks().editTask(currentTask, input, priorityValue, projectIndex);
             }
             dialog.close();
+            form.removeEventListener("click", handleCreateBtnClick);
+            sortPriority();
+            console.log(projects.projectList);
+            updateProjects();
             updateMain({ target: document.querySelector(".active") });
             watchCheckboxStatus();
-
-            form.removeEventListener("click", handleCreateBtnClick);
         }
         
     }
@@ -323,6 +335,24 @@ const dom = () => {
         }else if(type == "editStep"){
             form.innerHTML = stepsForm;
             form.id = "editStep-form";
+        }else if(type == "editTask"){
+            form.innerHTML = taskForm;
+            form.id = "editTask-form";
+
+            const low = document.querySelector(".lowPrioLabel");
+            low.addEventListener("click", function(){
+                setActiveButton(low);
+            })
+    
+            const mid = document.querySelector(".midPrioLabel");
+            mid.addEventListener("click", function(){
+                setActiveButton(mid);
+            })
+    
+            const high = document.querySelector(".highPrioLabel");
+            high.addEventListener("click", function(){
+                setActiveButton(high);
+            })
         }
     
         function setActiveButton(label){
@@ -337,6 +367,7 @@ const dom = () => {
         
             label.classList.add("prioActive");
         }
+        form.addEventListener("click", handleCreateBtnClick);
     }
 
     function handleProjects(){
@@ -512,8 +543,6 @@ const dom = () => {
 
     function updateMain(e){
 
-        
-        
         const listLis = projectSection.querySelectorAll("li");
         if (listLis.length === 0) {
             main.innerHTML = ``;
@@ -595,6 +624,7 @@ const dom = () => {
         main.appendChild(addToDo);
         addToDo.appendChild(addToDoIcon);
         bindDeleteBtnClickEvent();
+        bindEditBtnClickEvent();
         watchCheckboxStatus();
     }
 

@@ -27,24 +27,51 @@ const dom = () => {
 
     //EVENT LISTENERS
 
-    //add project button
-    addProjectBtn.addEventListener("click", () => {
-        createForm("project");
-        dialog.showModal();
-    });
 
-    //add task button
-    projectSection.addEventListener("click", (event) => {
-        if (event.target.classList.contains("add-task")) {
-            createForm("task");
+    function bindAddBtnClickEvent(){
+        addProjectBtn.removeEventListener("click", () => {
+            createForm("project");
             dialog.showModal();
-            
-            const projectDiv = event.target.parentNode.parentNode.parentNode;
-            const projectId = projectDiv.id.split("-")[1];
-            projectIndex = parseInt(projectId);
-        }
-    });
+        });
+        addProjectBtn.addEventListener("click", () => {
+            createForm("project");
+            dialog.showModal();
+        });
 
+        projectSection.removeEventListener("click", (event) => {
+            if (event.target.classList.contains("add-task")) {
+                createForm("task");
+                dialog.showModal();
+                
+                const projectDiv = event.target.parentNode.parentNode.parentNode;
+                const projectId = projectDiv.id.split("-")[1];
+                projectIndex = parseInt(projectId);
+            }
+        });
+        projectSection.addEventListener("click", (event) => {
+            if (event.target.classList.contains("add-task")) {
+                createForm("task");
+                dialog.showModal();
+                
+                const projectDiv = event.target.parentNode.parentNode.parentNode;
+                const projectId = projectDiv.id.split("-")[1];
+                projectIndex = parseInt(projectId);
+            }
+        });
+
+        main.removeEventListener("click", (event) => {
+            if (event.target.classList.contains("add-todo")) {
+                createForm("steps");
+                dialog.showModal();
+            }
+        });
+        main.addEventListener("click", (event) => {
+            if (event.target.classList.contains("add-todo")) {
+                createForm("steps");
+                dialog.showModal();
+            }
+        });
+    };
 
     function handleEditBtnClick(e) {
         if (e.target.classList.contains("fa-pen-to-square")) {
@@ -53,7 +80,7 @@ const dom = () => {
                 currentStep = todo.querySelector(".todo_text-head").textContent;
                 createForm("editStep");
                 dialog.showModal();
-                bindCheckboxClickEvent();
+                
             }else if(e.target.parentNode.classList.contains("project-head-group")){
                 currentTask = main.querySelector("#project-head").textContent;
                 createForm("editTask");
@@ -79,18 +106,9 @@ const dom = () => {
         });
     }
 
-    bindEditBtnClickEvent();
-
-    //add steps button
-    main.addEventListener("click", (event) => {
-        if (event.target.classList.contains("add-todo")) {
-            createForm("steps");
-            dialog.showModal();
-        }
-    });
-
     function bindTaskButtonsClickEvent() {
-        const taskButtons = projectSection.querySelectorAll("li");
+        const navbar = document.querySelector(".navbar");
+        const taskButtons = navbar.querySelectorAll("li");
         taskButtons.forEach((button) => {
             button.removeEventListener("click", (e) => {
                 updateMain(e);
@@ -102,8 +120,6 @@ const dom = () => {
             });
         });
     }
-
-    bindTaskButtonsClickEvent();
 
     function handleDeleteBtnClick(e) {
         if (e.target.classList.contains("fa-trash-can")) {
@@ -142,8 +158,6 @@ const dom = () => {
             });
         });
     }
-    
-    bindDeleteBtnClickEvent();
 
     //create button manipulation
     function handleCreateBtnClick(e) {
@@ -186,7 +200,6 @@ const dom = () => {
                 projects.editProject(currentProject, title);
             }
             dialog.close();
-            form.removeEventListener("click", handleCreateBtnClick);
             sortPriority();
             console.log(projects.projectList);
             updateProjects();
@@ -196,14 +209,11 @@ const dom = () => {
         
     }
 
-    function bindCheckboxClickEvent() {
-        main.removeEventListener("click", handleCheckboxClick);
-        form.removeEventListener("click", handleCheckboxClick);
-        main.addEventListener("click", handleCheckboxClick);
-        form.addEventListener("click", handleCheckboxClick);
+    function bindCreateBtnClickEvent() {
+        form.removeEventListener("click", handleCreateBtnClick);
+        form.addEventListener("click", handleCreateBtnClick);
     }
 
-    bindCheckboxClickEvent();
 
     //checkbox manipulation
     function handleCheckboxClick(event) {
@@ -233,6 +243,13 @@ const dom = () => {
 
         
     };
+
+    function bindCheckboxClickEvent() {
+        main.removeEventListener("click", handleCheckboxClick);
+        form.removeEventListener("click", handleCheckboxClick);
+        main.addEventListener("click", handleCheckboxClick);
+        form.addEventListener("click", handleCheckboxClick);
+    }
 
     function watchCheckboxStatus() {
         const checkedItems = document.querySelectorAll('.todo_checkbox_checked');
@@ -378,7 +395,6 @@ const dom = () => {
         
             label.classList.add("prioActive");
         }
-        form.addEventListener("click", handleCreateBtnClick);
     }
 
     function handleProjects(){
@@ -553,12 +569,14 @@ const dom = () => {
                 }
             }
         }
-        bindTaskButtonsClickEvent();
     }
+
+    
 
     function updateMain(e){
 
-        const listLis = projectSection.querySelectorAll("li");
+        const navbar = document.querySelector(".navbar");
+        const listLis = navbar.querySelectorAll("li");
         if (listLis.length === 0) {
             main.innerHTML = ``;
             return;
@@ -568,6 +586,11 @@ const dom = () => {
         });
         const clickedLi = e.target.closest("li");
         clickedLi.classList.add("active");
+
+        if(e.target.classList.contains("all")){
+            showAll();
+            return;
+        }
 
         main.innerHTML = ``;
         const headerDiv = document.createElement("div");
@@ -640,7 +663,70 @@ const dom = () => {
         addToDo.appendChild(addToDoIcon);
         bindDeleteBtnClickEvent();
         bindEditBtnClickEvent();
+        bindAddBtnClickEvent();
+        bindTaskButtonsClickEvent();
+        bindCreateBtnClickEvent();
+        bindCheckboxClickEvent();
         watchCheckboxStatus();
+
+    }
+
+    function showAll(){
+        main.innerHTML = ``;
+        const allProjects = projects.projectList;
+
+        const todoHTML = `
+            <div class="todo_text ms-1">
+                <span class="todo_text-head"></span>
+                <span class="todo_text-desc"></span>
+            </div>
+            <span class="ms-auto todo_date"></span>
+        `;
+
+        for(let i = 0; i < allProjects.length; i++){
+            const projectDiv = document.createElement("div");
+            projectDiv.id = `project-${i}`;
+            projectDiv.classList.add("mt-1");
+            main.appendChild(projectDiv);
+
+            const projectHeadGroup = document.createElement("div");
+            projectHeadGroup.classList.add("project-head-group");
+            projectDiv.appendChild(projectHeadGroup);
+
+            const projectHead = document.createElement("h1");
+            projectHead.classList.add("project_head");
+            projectHead.textContent = allProjects[i].title;
+            projectHeadGroup.appendChild(projectHead);
+
+            for(let j = 0; j < allProjects[i].tasks.length; j++){
+                const task = allProjects[i].tasks[j];
+                const taskDiv = document.createElement("div");
+                taskDiv.classList.add("task");
+                projectDiv.appendChild(taskDiv);
+
+                const taskTitle = document.createElement("h2");
+                taskTitle.textContent = task.title;
+                taskDiv.appendChild(taskTitle);
+
+                for(let k = 0; k < task.steps.length; k++){
+                    const todoDiv = document.createElement("div");
+                    todoDiv.classList.add("todo", "p-2", "my-1");
+                    todoDiv.innerHTML = todoHTML;
+                    taskDiv.appendChild(todoDiv);
+
+                    let todoHead = todoDiv.querySelector(".todo_text-head");
+                    let todoDesc = todoDiv.querySelector(".todo_text-desc");
+                    let todoDate = todoDiv.querySelector(".todo_date");
+                    todoHead.textContent = task.steps[k].title;
+                    todoDesc.textContent = task.steps[k].desc;
+                    const selectedDate = new Date(task.steps[k].date);
+                    const formattedDate = format(selectedDate, 'dd MMM yy');
+                    todoDate.textContent = formattedDate;
+                }
+            }
+
+        }
+
     }
 
     return{

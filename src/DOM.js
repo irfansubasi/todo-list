@@ -11,15 +11,14 @@ const dom = () => {
         const firstLi = projectSection.querySelector('li');
         updateMain({ target: firstLi });
         watchCheckboxStatus();
-        bindEditBtnClickEvent();
     };
 
     const dialog = document.querySelector("dialog");
     const form = dialog.querySelector("form");
-    const addProjectBtn = document.querySelector(".add-project");
+
     const projectSection = document.querySelector(".project-section");
     const main = document.querySelector(".content");
-    const deleteBtns = document.querySelectorAll(".fa-trash-can");
+
     let projectIndex = 0;
     let currentStep;
     let currentTask;
@@ -27,51 +26,38 @@ const dom = () => {
 
     //EVENT LISTENERS
 
+    function bindEvents(){
+        const page = document.querySelector(".page");
+        page.removeEventListener("click", handleClicks);
+        page.addEventListener("click", handleClicks);
+    }
 
-    function bindAddBtnClickEvent(){
-        addProjectBtn.removeEventListener("click", () => {
+    function handleClicks(event){
+        if (event.target.classList.contains("add-project")) {
             createForm("project");
             dialog.showModal();
-        });
-        addProjectBtn.addEventListener("click", () => {
-            createForm("project");
+        }else if(event.target.classList.contains("add-task")){
+            createForm("task");
+            const projectDiv = event.target.parentNode.parentNode.parentNode;
+            const projectId = projectDiv.id.split("-")[1];
+            projectIndex = parseInt(projectId);
             dialog.showModal();
-        });
+        }else if(event.target.classList.contains("add-todo")){
+            createForm("steps");
+            dialog.showModal();
+        }else if(event.target.classList.contains("fa-pen-to-square")){
+            handleEditBtnClick(event);
+        }else if((event.target.tagName === "SPAN" && event.target.parentNode.parentNode.classList.contains("task-list")) || (event.target.classList.contains("all"))){
+            updateMain(event);
+        }else if(event.target.classList.contains("fa-trash-can")){
+            handleDeleteBtnClick(event);
+        }else if(event.target.classList.contains("createBtn")){
+            handleCreateBtnClick(event);
+        }else if(event.target.classList.contains("todo_checkbox") || event.target.classList.contains("todo_checkbox_checked")){
+            handleCheckboxClick(event.target);
+        }
+    }
 
-        projectSection.removeEventListener("click", (event) => {
-            if (event.target.classList.contains("add-task")) {
-                createForm("task");
-                dialog.showModal();
-                
-                const projectDiv = event.target.parentNode.parentNode.parentNode;
-                const projectId = projectDiv.id.split("-")[1];
-                projectIndex = parseInt(projectId);
-            }
-        });
-        projectSection.addEventListener("click", (event) => {
-            if (event.target.classList.contains("add-task")) {
-                createForm("task");
-                dialog.showModal();
-                
-                const projectDiv = event.target.parentNode.parentNode.parentNode;
-                const projectId = projectDiv.id.split("-")[1];
-                projectIndex = parseInt(projectId);
-            }
-        });
-
-        main.removeEventListener("click", (event) => {
-            if (event.target.classList.contains("add-todo")) {
-                createForm("steps");
-                dialog.showModal();
-            }
-        });
-        main.addEventListener("click", (event) => {
-            if (event.target.classList.contains("add-todo")) {
-                createForm("steps");
-                dialog.showModal();
-            }
-        });
-    };
 
     function handleEditBtnClick(e) {
         if (e.target.classList.contains("fa-pen-to-square")) {
@@ -91,34 +77,6 @@ const dom = () => {
                 dialog.showModal();
             }
         }
-    }
-    function bindEditBtnClickEvent(){
-        const editBtns = document.querySelectorAll(".fa-pen-to-square");
-        editBtns.forEach((btn) => {
-            btn.removeEventListener("click", (e) => {
-                handleEditBtnClick(e);
-            });
-        });
-        editBtns.forEach((btn) => {
-            btn.addEventListener("click", (e) => {
-                handleEditBtnClick(e);
-            });
-        });
-    }
-
-    function bindTaskButtonsClickEvent() {
-        const navbar = document.querySelector(".navbar");
-        const taskButtons = navbar.querySelectorAll("li");
-        taskButtons.forEach((button) => {
-            button.removeEventListener("click", (e) => {
-                updateMain(e);
-            });
-        });
-        taskButtons.forEach((button) => {
-            button.addEventListener("click", (e) => {
-                updateMain(e);
-            });
-        });
     }
 
     function handleDeleteBtnClick(e) {
@@ -145,111 +103,77 @@ const dom = () => {
         }
     }
 
-    function bindDeleteBtnClickEvent() {
-        const deleteBtns = document.querySelectorAll(".fa-trash-can");
-        deleteBtns.forEach((btn) => {
-            btn.removeEventListener("click", (e) => {
-                handleDeleteBtnClick(e);
-            });
-        });
-        deleteBtns.forEach((btn) => {
-            btn.addEventListener("click", (e) => {
-                handleDeleteBtnClick(e);
-            });
-        });
-    }
 
     //create button manipulation
     function handleCreateBtnClick(e) {
 
-        if (e.target.classList.contains("createBtn")) {
-            e.preventDefault();
+        e.preventDefault();
 
-            const input = form.querySelector("input").value;
-            
-            if(form.id == "project-form"){
-                projects.addProject(input);
-            }else if(form.id == "task-form"){
-                const radioGroup = document.querySelector(".radio-group");
-                const activeLabel = Array.from(radioGroup.querySelectorAll("label")).find(label => label.classList.contains("prioActive"));
-                const priorityValue = activeLabel ? activeLabel.querySelector("input").value : null;
-                tasks().addTask(input, priorityValue, projectIndex);
-            }else if (form.id == "steps-form") {
-                const mainTitle = document.querySelector("#project-head").textContent;
-                const title = form.querySelector("#titleInput").value;
-                const desc = form.querySelector("#descInput").value;
-                const date = form.querySelector("#dateInput").value;
-                const completed = form.querySelector("#isCompleted").classList.contains("todo_checkbox_checked") ? true : false;
-                steps().addStep(title, desc, date, completed, mainTitle);
-            }else if(form.id == "editStep-form"){
-                const mainTitle = document.querySelector("#project-head").textContent;
-                const title = form.querySelector("#titleInput").value;
-                const desc = form.querySelector("#descInput").value;
-                const date = form.querySelector("#dateInput").value;
-                const completed = form.querySelector("#isCompleted").classList.contains("todo_checkbox_checked") ? true : false;
-                steps().editStep(currentStep, title, desc, date, completed, mainTitle);
-            }else if(form.id == "editTask-form"){
-                const radioGroup = document.querySelector(".radio-group");
-                const activeLabel = Array.from(radioGroup.querySelectorAll("label")).find(label => label.classList.contains("prioActive"));
-                const priorityValue = activeLabel ? activeLabel.querySelector("input").value : null;
-                const activeTask = projectSection.querySelector(".active");
-                const projectIndex = activeTask.closest("div[id^='project-']").id.split("-")[1];
-                tasks().editTask(currentTask, input, priorityValue, projectIndex);
-            }else if(form.id == "editProject-form"){
-                const title = form.querySelector("#titleInput").value;
-                projects.editProject(currentProject, title);
-            }
-            dialog.close();
-            sortPriority();
-            console.log(projects.projectList);
-            updateProjects();
-            updateMain({ target: document.querySelector(".active") });
-            watchCheckboxStatus();
-        }
+        const input = form.querySelector("input").value;
         
+        if(form.id == "project-form"){
+            projects.addProject(input);
+        }else if(form.id == "task-form"){
+            const radioGroup = document.querySelector(".radio-group");
+            const activeLabel = Array.from(radioGroup.querySelectorAll("label")).find(label => label.classList.contains("prioActive"));
+            const priorityValue = activeLabel ? activeLabel.querySelector("input").value : null;
+            tasks().addTask(input, priorityValue, projectIndex);
+        }else if (form.id == "steps-form") {
+            const mainTitle = document.querySelector("#project-head").textContent;
+            const title = form.querySelector("#titleInput").value;
+            const desc = form.querySelector("#descInput").value;
+            const date = form.querySelector("#dateInput").value;
+            const completed = form.querySelector("#isCompleted").classList.contains("todo_checkbox_checked") ? true : false;
+            steps().addStep(title, desc, date, completed, mainTitle);
+        }else if(form.id == "editStep-form"){
+            const mainTitle = document.querySelector("#project-head").textContent;
+            const title = form.querySelector("#titleInput").value;
+            const desc = form.querySelector("#descInput").value;
+            const date = form.querySelector("#dateInput").value;
+            const completed = form.querySelector("#isCompleted").classList.contains("todo_checkbox_checked") ? true : false;
+            steps().editStep(currentStep, title, desc, date, completed, mainTitle);
+        }else if(form.id == "editTask-form"){
+            const radioGroup = document.querySelector(".radio-group");
+            const activeLabel = Array.from(radioGroup.querySelectorAll("label")).find(label => label.classList.contains("prioActive"));
+            const priorityValue = activeLabel ? activeLabel.querySelector("input").value : null;
+            const activeTask = projectSection.querySelector(".active");
+            const projectIndex = activeTask.closest("div[id^='project-']").id.split("-")[1];
+            tasks().editTask(currentTask, input, priorityValue, projectIndex);
+        }else if(form.id == "editProject-form"){
+            const title = form.querySelector("#titleInput").value;
+            projects.editProject(currentProject, title);
+        }
+        dialog.close();
+        sortPriority();
+        console.log(projects.projectList);
+        updateProjects();
+        updateMain({ target: document.querySelector(".active") });
+        watchCheckboxStatus();
     }
-
-    function bindCreateBtnClickEvent() {
-        form.removeEventListener("click", handleCreateBtnClick);
-        form.addEventListener("click", handleCreateBtnClick);
-    }
-
 
     //checkbox manipulation
     function handleCheckboxClick(event) {
-        const target = event.target;
-        if (target.classList.contains("todo_checkbox") || target.classList.contains("todo_checkbox_checked")) {
-            target.classList.toggle("todo_checkbox");
-            target.classList.toggle("todo_checkbox_checked");
-            if(target.classList.contains("todo_checkbox")){
-                target.parentNode.style.opacity = "1";
-            }else if(target.classList.contains("todo_checkbox_checked")){
-                target.parentNode.style.opacity = "0.5";
-            }
-            const taskTitle = target.parentNode.querySelector('.todo_text .todo_text-head');
+        event.classList.toggle("todo_checkbox");
+        event.classList.toggle("todo_checkbox_checked");
+        if(event.classList.contains("todo_checkbox")){
+            event.parentNode.style.opacity = "1";
+        }else if(event.classList.contains("todo_checkbox_checked")){
+            event.parentNode.style.opacity = "0.5";
+        }
+        const taskTitle = event.parentNode.querySelector('.todo_text .todo_text-head');
 
-            for (let project of projects.projectList) {
-                for (let task of project.tasks) {
-                    for (let step of task.steps) {
-                        if (step.title === taskTitle.textContent) {
-                            step.completed = target.classList.contains("todo_checkbox_checked");
-                        }
+        for (let project of projects.projectList) {
+            for (let task of project.tasks) {
+                for (let step of task.steps) {
+                    if (step.title === taskTitle.textContent) {
+                        step.completed = event.classList.contains("todo_checkbox_checked");
                     }
                 }
             }
-            localStorage.setItem('projects', JSON.stringify(projects.projectList));
         }
-        
-
-        
+        localStorage.setItem('projects', JSON.stringify(projects.projectList));
     };
 
-    function bindCheckboxClickEvent() {
-        main.removeEventListener("click", handleCheckboxClick);
-        form.removeEventListener("click", handleCheckboxClick);
-        main.addEventListener("click", handleCheckboxClick);
-        form.addEventListener("click", handleCheckboxClick);
-    }
 
     function watchCheckboxStatus() {
         const checkedItems = document.querySelectorAll('.todo_checkbox_checked');
@@ -574,7 +498,7 @@ const dom = () => {
     
 
     function updateMain(e){
-
+        console.log("worked");
         const navbar = document.querySelector(".navbar");
         const listLis = navbar.querySelectorAll("li");
         if (listLis.length === 0) {
@@ -661,14 +585,8 @@ const dom = () => {
         addToDoIcon.classList.add("fa-solid", "fa-plus");
         main.appendChild(addToDo);
         addToDo.appendChild(addToDoIcon);
-        bindDeleteBtnClickEvent();
-        bindEditBtnClickEvent();
-        bindAddBtnClickEvent();
-        bindTaskButtonsClickEvent();
-        bindCreateBtnClickEvent();
-        bindCheckboxClickEvent();
+        bindEvents();
         watchCheckboxStatus();
-
     }
 
     function showAll(){
@@ -733,7 +651,6 @@ const dom = () => {
         handleProjects,
         handleTasks,
         handleSteps,
-        bindCheckboxClickEvent,
         updateMain,
     }
 }

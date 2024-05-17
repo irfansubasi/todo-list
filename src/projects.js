@@ -77,7 +77,6 @@ const projects = (() => {
             projectList.push(project);
             localStorage.setItem('projects', JSON.stringify(projectList));
             dom().handleProjects();
-            dom().bindCheckboxClickEvent();
         }
         
     }

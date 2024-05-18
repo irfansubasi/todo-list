@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 
 
 const dom = () => {
-
+    
     document.addEventListener("DOMContentLoaded", function() {
         const toggleButton = document.querySelector(".navbar-toggle");
         const navbarMenu = document.querySelector(".navbar-menu");
@@ -15,7 +15,6 @@ const dom = () => {
         });
     });
 
-
     window.onload = function() {
         updateProjects();
         const firstLi = projectSection.querySelector('li');
@@ -23,25 +22,26 @@ const dom = () => {
         watchCheckboxStatus();
     };
 
+    //DOM ELEMENTS
     const dialog = document.querySelector("dialog");
     const form = dialog.querySelector("form");
-
     const projectSection = document.querySelector(".project-section");
     const main = document.querySelector(".content");
 
+    //VARIABLES
     let projectIndex = 0;
     let currentStep;
     let currentTask;
     let currentProject;
 
-    //EVENT LISTENERS
-
+    //EVENT LISTENERS BINDING
     function bindEvents(){
         const page = document.querySelector(".page");
         page.removeEventListener("click", handleClicks);
         page.addEventListener("click", handleClicks);
     }
 
+    //EVENT LISTENERS
     function handleClicks(event){
         if (event.target.classList.contains("add-project")) {
             createForm("project");
@@ -70,7 +70,7 @@ const dom = () => {
         }
     }
 
-
+    //EDIT BUTTONS
     function handleEditBtnClick(e) {
         if (e.target.classList.contains("fa-pen-to-square")) {
             if(e.target.parentNode.classList.contains("todo")){
@@ -91,6 +91,7 @@ const dom = () => {
         }
     }
 
+    //DELETE BUTTONS
     function handleDeleteBtnClick(e) {
         if (e.target.classList.contains("fa-trash-can")) {
             if(e.target.parentNode.classList.contains("todo")){
@@ -116,7 +117,7 @@ const dom = () => {
     }
 
 
-    //create button manipulation
+    //CREATE BUTTONS
     function handleCreateBtnClick(e) {
 
         e.preventDefault();
@@ -163,7 +164,7 @@ const dom = () => {
         watchCheckboxStatus();
     }
 
-    //checkbox manipulation
+    //CHECKBOXES
     function handleCheckboxClick(event) {
         event.classList.toggle("todo_checkbox");
         event.classList.toggle("todo_checkbox_checked");
@@ -186,7 +187,7 @@ const dom = () => {
         localStorage.setItem('projects', JSON.stringify(projects.projectList));
     };
 
-
+    //WATCH CHECKBOX STATUS
     function watchCheckboxStatus() {
         const checkedItems = document.querySelectorAll('.todo_checkbox_checked');
         checkedItems.forEach(function(item) {
@@ -196,7 +197,7 @@ const dom = () => {
 
 
 
-    //createForm
+    //FORMS
     function createForm(type){
         form.innerHTML = ``;
         
@@ -333,6 +334,7 @@ const dom = () => {
         }
     }
 
+    //FUNCTION FOR HANDLING PROJECTS
     function handleProjects(){
         const projectArea = document.querySelector(".project-section");
         const projects = projectArea.querySelectorAll('[id^="project-"]');
@@ -375,6 +377,7 @@ const dom = () => {
         iconDiv.appendChild(addIcon);
     }
 
+    //FUNCTION FOR HANDLING TASKS
     function handleTasks(input,priority,index){
         const projectDiv = document.querySelector(`#project-${index}`);
        
@@ -396,6 +399,7 @@ const dom = () => {
         li.appendChild(span);
     }
 
+    //FUNCTION FOR HANDLING STEPS
     function handleSteps(title, desc, date, completed){
         const todo = document.createElement("div");
         todo.classList.add("todo", "p-2", "my-1");
@@ -440,6 +444,7 @@ const dom = () => {
         todoIconGroup.appendChild(trashIcon);
     }
 
+    //SORT PRIORITY FOR TASKS
     function sortPriority(){
         const lists = document.querySelectorAll('.task-list');
 
@@ -453,6 +458,7 @@ const dom = () => {
         })
     }
     
+    //UPDATE PROJECTS
     function updateProjects(){
         projectSection.innerHTML = ``;
         const projectList = projects.projectList;
@@ -511,6 +517,7 @@ const dom = () => {
         }
     }
 
+    //UPDATE MAIN PAGE
     function updateMain(e){
         console.log("worked");
         const navbar = document.querySelector(".navbar");
@@ -611,6 +618,7 @@ const dom = () => {
         watchCheckboxStatus();
     }
 
+    //SHOW ALL PROJECTS,TASKS AND STEPS
     function showAll(){
         main.innerHTML = ``;
         const allProjects = projects.projectList;
@@ -669,6 +677,7 @@ const dom = () => {
 
     }
 
+    //SHOW TODAYS TASKS
     function showToday(){
         main.innerHTML = ``;
 
@@ -730,4 +739,3 @@ const dom = () => {
 }
 
 export default dom;
-

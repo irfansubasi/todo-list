@@ -73,7 +73,7 @@ const dom = () => {
     //EDIT BUTTONS
     function handleEditBtnClick(e) {
         if (e.target.classList.contains("fa-pen-to-square")) {
-            if(e.target.parentNode.classList.contains("todo")){
+            if(e.target.parentNode.parentNode.classList.contains("todo")){
                 const todo = e.target.closest(".todo");
                 currentStep = todo.querySelector(".todo_text-head").textContent;
                 createForm("editStep");
@@ -94,7 +94,7 @@ const dom = () => {
     //DELETE BUTTONS
     function handleDeleteBtnClick(e) {
         if (e.target.classList.contains("fa-trash-can")) {
-            if(e.target.parentNode.classList.contains("todo")){
+            if(e.target.parentNode.parentNode.classList.contains("todo")){
                 const todo = e.target.closest(".todo");
                 const todoHead = todo.querySelector(".todo_text-head");
                 const mainTitle = document.querySelector("#project-head").textContent;
@@ -131,14 +131,14 @@ const dom = () => {
             const activeLabel = Array.from(radioGroup.querySelectorAll("label")).find(label => label.classList.contains("prioActive"));
             const priorityValue = activeLabel ? activeLabel.querySelector("input").value : null;
             tasks().addTask(input, priorityValue, projectIndex);
-        }else if (form.id == "steps-form") {
+        } else if (form.id == "steps-form") {
             const mainTitle = document.querySelector("#project-head").textContent;
             const title = form.querySelector("#titleInput").value;
             const desc = form.querySelector("#descInput").value;
-            const date = form.querySelector("#dateInput").value;
+            const date = form.querySelector("#dateInput").value || new Date().toISOString().split('T')[0];
             const completed = form.querySelector("#isCompleted").classList.contains("todo_checkbox_checked") ? true : false;
             steps().addStep(title, desc, date, completed, mainTitle);
-        }else if(form.id == "editStep-form"){
+        } else if(form.id == "editStep-form"){
             const mainTitle = document.querySelector("#project-head").textContent;
             const title = form.querySelector("#titleInput").value;
             const desc = form.querySelector("#descInput").value;
@@ -158,7 +158,6 @@ const dom = () => {
         }
         dialog.close();
         sortPriority();
-        console.log(projects.projectList);
         updateProjects();
         updateMain({ target: document.querySelector(".active") });
         watchCheckboxStatus();

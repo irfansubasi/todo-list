@@ -1,6 +1,6 @@
 import dom from "./DOM";
 const projects = (() => {
-
+    localStorage.clear();
     let projectList = [];
 
     if(localStorage.getItem("projects") === null){

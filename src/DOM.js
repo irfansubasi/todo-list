@@ -425,16 +425,17 @@ const dom = () => {
         todoDesc.textContent = desc;
         todoText.appendChild(todoDesc);
 
+
+        const todoIconGroup = document.createElement("div");
+        todoIconGroup.classList.add("todo-icon-group");
+        todo.appendChild(todoIconGroup);
+
         const todoDate = document.createElement("span");
         todoDate.classList.add("ms-auto", "todo_date");
         const selectedDate = new Date(date);
         const formattedDate = format(selectedDate, 'dd MMM yy');
         todoDate.textContent = formattedDate;
-        todo.appendChild(todoDate);
-
-        const todoIconGroup = document.createElement("div");
-        todoIconGroup.classList.add("todo-icon-group");
-        todo.appendChild(todoIconGroup);
+        todoIconGroup.appendChild(todoDate);
 
         const editIcon = document.createElement("i");
         editIcon.classList.add("ms-1", "fa-regular", "fa-pen-to-square");
@@ -572,8 +573,8 @@ const dom = () => {
                 <span class="todo_text-head"></span>
                 <span class="todo_text-desc"></span>
             </div>
-            <span class="ms-auto todo_date"></span>
             <div class="todo-icon-group">
+                <span class="ms-auto todo_date"></span>
                 <i class="ms-1 fa-regular fa-pen-to-square"></i>
                 <i class="ms-1 fa-regular fa-trash-can"></i>
             </div>

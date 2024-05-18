@@ -135,14 +135,16 @@ const dom = () => {
             const mainTitle = document.querySelector("#project-head").textContent;
             const title = form.querySelector("#titleInput").value;
             const desc = form.querySelector("#descInput").value;
-            const date = form.querySelector("#dateInput").value || new Date().toISOString().split('T')[0];
+            const dateInput = form.querySelector("#dateInput").value;
+            const date = dateInput ? dateInput : format(new Date(), 'yyyy-MM-dd');
             const completed = form.querySelector("#isCompleted").classList.contains("todo_checkbox_checked") ? true : false;
             steps().addStep(title, desc, date, completed, mainTitle);
         } else if(form.id == "editStep-form"){
             const mainTitle = document.querySelector("#project-head").textContent;
             const title = form.querySelector("#titleInput").value;
             const desc = form.querySelector("#descInput").value;
-            const date = form.querySelector("#dateInput").value;
+            const dateInput = form.querySelector("#dateInput").value;
+            const date = dateInput ? dateInput : format(new Date(), 'yyyy-MM-dd');
             const completed = form.querySelector("#isCompleted").classList.contains("todo_checkbox_checked") ? true : false;
             steps().editStep(currentStep, title, desc, date, completed, mainTitle);
         }else if(form.id == "editTask-form"){
@@ -518,7 +520,6 @@ const dom = () => {
 
     //UPDATE MAIN PAGE
     function updateMain(e){
-        console.log("worked");
         const navbar = document.querySelector(".navbar");
         const listLis = navbar.querySelectorAll("li");
         if (listLis.length === 0) {

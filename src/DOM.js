@@ -47,7 +47,9 @@ const dom = () => {
             dialog.showModal();
         }else if(event.target.classList.contains("fa-pen-to-square")){
             handleEditBtnClick(event);
-        }else if((event.target.tagName === "SPAN" && event.target.parentNode.parentNode.classList.contains("task-list")) || (event.target.classList.contains("all"))){
+        }else if((event.target.tagName === "SPAN" && event.target.parentNode.parentNode.classList.contains("task-list")) 
+            || (event.target.classList.contains("all")) 
+            || (event.target.classList.contains("today"))){
             updateMain(event);
         }else if(event.target.classList.contains("fa-trash-can")){
             handleDeleteBtnClick(event);
@@ -495,8 +497,6 @@ const dom = () => {
         }
     }
 
-    
-
     function updateMain(e){
         console.log("worked");
         const navbar = document.querySelector(".navbar");
@@ -513,6 +513,11 @@ const dom = () => {
 
         if(e.target.classList.contains("all")){
             showAll();
+            return;
+        }
+
+        if(e.target.classList.contains("today")){
+            showToday();
             return;
         }
 
@@ -645,6 +650,58 @@ const dom = () => {
 
         }
 
+    }
+
+    function showToday(){
+        main.innerHTML = ``;
+
+        const todoHTML = `
+            <div class="todo_checkbox"></div>
+            <div class="todo_text ms-1">
+                <span class="todo_text-head"></span>
+                <span class="todo_text-desc"></span>
+            </div>
+            <span class="ms-auto todo_date"></span>
+        `;
+
+        const today = new Date();
+        const todayFormatted = format(today, 'dd MMM yy');
+
+        const allProjects = projects.projectList;
+
+        allProjects.forEach(project => {
+            project.tasks.forEach(task => {
+                task.steps.forEach(step => {
+                    const stepDate = new Date(step.date);
+                    const stepDateFormatted = format(stepDate, 'dd MMM yy');
+                    if (stepDateFormatted === todayFormatted) {
+                        const todo = document.createElement("div");
+                        todo.classList.add("todo", "p-2", "my-1");
+                        todo.innerHTML = todoHTML;
+                        main.appendChild(todo);
+
+                        const todoHead = todo.querySelector(".todo_text-head");
+                        const todoDesc = todo.querySelector(".todo_text-desc");
+                        const todoDate = todo.querySelector(".todo_date");
+                        const todoCheckbox = todo.querySelector(".todo_checkbox");
+
+                        todoHead.textContent = step.title;
+                        todoDesc.textContent = step.desc;
+                        todoDate.textContent = stepDateFormatted;
+                        
+                        if (step.completed) {
+                            todoCheckbox.classList.add("todo_checkbox_checked");
+                            todoCheckbox.classList.remove("todo_checkbox");
+                        } else {
+                            todoCheckbox.classList.add("todo_checkbox");
+                            todoCheckbox.classList.remove("todo_checkbox_checked");
+                        }
+                    }else{
+                        main.textContent = "No tasks for today!";
+                    }
+                });
+            });
+        });
     }
 
     return{

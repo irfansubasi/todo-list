@@ -17,47 +17,51 @@
                 <div class="header__logo">
                     <i class="fa-solid fa-list-check"></i>
                     <span class="header__logo-text">Todo Daily</span>
+                    <div class="navbar-toggle">
+                        <i class="fa-solid fa-bars"></i>
+                    </div>
                 </div>
             </div>
         </div>
         <aside class="navbar p-1">
-            <ul class="navbar__nav p-1">
-                <li class="navbar__nav-item all">
-                    <span class="all"><i class="fa-solid fa-list all"></i>All</span>
-                </li>
-                <li class="navbar__nav-item today">
-                    <span class="today"><i class="fa-solid fa-calendar-day today"></i>Today</span>
-                </li>
-            </ul>
-            <hr>
-            <div class="project-section p-1">
-                <div id="project-0">
-                    <div class="project_head">
-                        <h3>Work</h3>
-                        <i class="add-task fa-solid fa-plus ms-auto"></i>
+            <div class="navbar-menu">
+                <ul class="navbar__nav p-1">
+                    <li class="navbar__nav-item all">
+                        <span class="all"><i class="fa-solid fa-list all"></i>All</span>
+                    </li>
+                    <li class="navbar__nav-item today">
+                        <span class="today"><i class="fa-solid fa-calendar-day today"></i>Today</span>
+                    </li>
+                </ul>
+                <hr>
+                <div class="project-section p-1">
+                    <div id="project-0">
+                        <div class="project_head">
+                            <h3>Work</h3>
+                            <i class="add-task fa-solid fa-plus ms-auto"></i>
+                        </div>
+                        <ul class="ms-1 task-list">
+                            <li data-priority="mid" class="mt-1">
+                                <span>Learn react</span>
+                            </li>
+                        </ul>
                     </div>
-                    <ul class="ms-1 task-list">
-                        <li data-priority="mid" class="mt-1">
-                            <span>Learn react</span>
-                        </li>
-                    </ul>
-                </div>
-                <div id="project-1" class="mt-1">
-                    <div class="project_head">
-                        <h3>Family</h3>
-                        <i class="add-task fa-solid fa-plus ms-auto"></i>
+                    <div id="project-1" class="mt-1">
+                        <div class="project_head">
+                            <h3>Family</h3>
+                            <i class="add-task fa-solid fa-plus ms-auto"></i>
+                        </div>
+                        <ul class="ms-1 task-list">
+                            <li data-priority="mid" class="mt-1">
+                                <span>Birthday party</span>
+                            </li>
+                        </ul>
                     </div>
-                    <ul class="ms-1 task-list">
-                        <li data-priority="mid" class="mt-1">
-                            <span>Birthday party</span>
-                        </li>
-                    </ul>
                 </div>
-
-            </div>
-            <div class="add-project p-1 mt-4">
-                <i class="fa-solid fa-plus me-1"></i>
-                Add Project
+                <div class="add-project p-1 mt-4">
+                    <i class="fa-solid fa-plus me-1"></i>
+                    Add Project
+                </div>
             </div>
         </aside>
         <main class="content p-3">

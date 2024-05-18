@@ -29,6 +29,16 @@
     color: $grey-color;
     overflow-x: hidden;
 
+    &-toggle{
+        display: none;
+        background: none;
+        border: none;
+        color: var(--white-color);
+        font-size: 1.5rem;
+        cursor: pointer;
+        margin-left: auto;
+    }
+
     &__nav{
         &-item{
             cursor: pointer;
@@ -80,5 +90,37 @@
 
     &:hover{
         opacity: 0.5;
+    }
+}
+
+@media (max-width: 768px){
+    .page{
+        grid-template-columns: 100%;
+        grid-template-rows: auto auto;
+    }
+
+    .navbar{
+        background-color: inherit;
+        &-menu {
+            display: none;
+            flex-direction: column;
+
+            &.show{
+                display: flex;
+            }
+    
+        }
+
+        &-toggle{
+            display: block;
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+        }
+    }
+    
+    .content {
+        grid-column: span 2;
+        padding: 1rem;
     }
 }

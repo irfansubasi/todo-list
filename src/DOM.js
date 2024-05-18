@@ -6,6 +6,16 @@ import { format } from 'date-fns';
 
 const dom = () => {
 
+    document.addEventListener("DOMContentLoaded", function() {
+        const toggleButton = document.querySelector(".navbar-toggle");
+        const navbarMenu = document.querySelector(".navbar-menu");
+
+        toggleButton.addEventListener("click", function() {
+            navbarMenu.classList.toggle("show");
+        });
+    });
+
+
     window.onload = function() {
         updateProjects();
         const firstLi = projectSection.querySelector('li');
@@ -417,13 +427,17 @@ const dom = () => {
         todoDate.textContent = formattedDate;
         todo.appendChild(todoDate);
 
+        const todoIconGroup = document.createElement("div");
+        todoIconGroup.classList.add("todo-icon-group");
+        todo.appendChild(todoIconGroup);
+
         const editIcon = document.createElement("i");
         editIcon.classList.add("ms-1", "fa-regular", "fa-pen-to-square");
-        todo.appendChild(editIcon);
+        todoIconGroup.appendChild(editIcon);
 
         const trashIcon = document.createElement("i");
         trashIcon.classList.add("ms-1", "fa-regular", "fa-trash-can");
-        todo.appendChild(trashIcon);
+        todoIconGroup.appendChild(trashIcon);
     }
 
     function sortPriority(){
@@ -552,8 +566,11 @@ const dom = () => {
                 <span class="todo_text-desc"></span>
             </div>
             <span class="ms-auto todo_date"></span>
-            <i class="ms-1 fa-regular fa-pen-to-square"></i>
-            <i class="ms-1 fa-regular fa-trash-can"></i>
+            <div class="todo-icon-group">
+                <i class="ms-1 fa-regular fa-pen-to-square"></i>
+                <i class="ms-1 fa-regular fa-trash-can"></i>
+            </div>
+            
         `;
 
 

@@ -43,6 +43,11 @@
         }
     }
 
+    &-icon-group{
+        display: flex;
+        margin-left: auto;
+    }
+
     i{
         cursor: pointer;
     }
@@ -57,5 +62,32 @@
 
     &:hover{
         opacity: 0.5;
+    }
+}
+
+@media (max-width: 768px){
+    .todo{
+        flex-direction: column;
+        height: unset;
+
+        &_text{
+            align-items: center;
+            margin-top: 1rem;
+            margin-left: unset;
+        }
+
+        &_date{
+            margin-top: 1rem;
+            margin-left: unset!important;
+        }
+
+        &-icon-group{
+            margin-left: unset!important;
+            margin-top: 1rem;
+
+            & i:first-child{
+                margin-left: unset!important;
+            }
+        }
     }
 }

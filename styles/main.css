@@ -350,6 +350,15 @@ ul {
   color: #6B6B6B;
   overflow-x: hidden;
 }
+.navbar-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--white-color);
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-left: auto;
+}
 .navbar__nav-item {
   cursor: pointer;
   padding: 0.5rem 0;
@@ -391,6 +400,32 @@ ul {
   opacity: 0.5;
 }
 
+@media (max-width: 768px) {
+  .page {
+    grid-template-columns: 100%;
+    grid-template-rows: auto auto;
+  }
+  .navbar {
+    background-color: inherit;
+  }
+  .navbar-menu {
+    display: none;
+    flex-direction: column;
+  }
+  .navbar-menu.show {
+    display: flex;
+  }
+  .navbar-toggle {
+    display: block;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+  }
+  .content {
+    grid-column: span 2;
+    padding: 1rem;
+  }
+}
 .project-head-group {
   display: flex;
   align-items: center;
@@ -431,6 +466,10 @@ ul {
 .todo_text-desc {
   color: #6B6B6B;
 }
+.todo-icon-group {
+  display: flex;
+  margin-left: auto;
+}
 .todo i {
   cursor: pointer;
 }
@@ -445,6 +484,28 @@ ul {
   opacity: 0.5;
 }
 
+@media (max-width: 768px) {
+  .todo {
+    flex-direction: column;
+    height: unset;
+  }
+  .todo_text {
+    align-items: center;
+    margin-top: 1rem;
+    margin-left: unset;
+  }
+  .todo_date {
+    margin-top: 1rem;
+    margin-left: unset !important;
+  }
+  .todo-icon-group {
+    margin-left: unset !important;
+    margin-top: 1rem;
+  }
+  .todo-icon-group i:first-child {
+    margin-left: unset !important;
+  }
+}
 form {
   display: flex;
   flex-direction: column;
